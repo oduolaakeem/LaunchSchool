@@ -1,0 +1,714 @@
+[[[o:RuboCop::Cop::Offense
+:@severityo:RuboCop::Cop::Severity:
+@name:convention:@locationo:Parser::Source::Range:@source_buffero:Parser::Source::Buffer
+;I"µ/home/ubuntu/workspace/LaunchSchool/programmin_and_back_end_development/object_oriented_programming/lesson_2_object_oriented_programming/007_RPS_bonus_features/rps_bonus_features.rb:ET:@sourceI"$require 'pry'
+
+class WeightedArray
+  attr_accessor :array, :weights, :ranges
+
+  def initialize(array, weights_array = nil)
+    self.array = array
+    !weights_array ? set_weights : self.weights = weights_array
+    set_ranges
+  end
+
+  def random_item
+    random_value = Random.new.rand(self.ranges.last.last.to_f)
+    random_selection = nil
+    self.ranges.each_with_index do |range, index|
+      if range[0] < random_value && random_value <= range[1]
+        random_selection = self.array[index]
+      end
+    end
+    random_selection
+  end
+  
+  def increase_weight(index, units_increased)
+    self.weights[index] += units_increased
+    set_ranges
+  end 
+  
+  def decrease_weight(index, units_decreased)
+    self.weights[index] - units_decreased <= 0 ? self.weights[index] = 0 : self.weights[index] -= units_decreased
+    set_ranges
+  end
+  
+  def set_weights
+    self.weights = []
+    self.array.size.times {self.weights << 100}
+  end
+  
+  def set_ranges
+    self.ranges = []
+    acum = 0
+    self.weights.each do |weight|
+      min = acum
+      acum += weight
+      max = acum
+      self.ranges << [min, max]
+    end
+  end
+  
+  def to_s
+    self.array.each_with_index do |value, index|
+      puts "'#{value}' pick up chance #{(self.weights[index] / self.ranges.last.last.to_f * 100).round(2)}"
+    end
+  end
+end
+
+class Rock
+  NAME = 'rock'
+  attr_accessor :name, :win_against, :lose_against
+  
+  def initialize
+    self.win_against = 'scissors'
+    self.lose_against = 'paper'
+    self.name = NAME
+  end
+end
+
+class Paper
+  NAME = 'paper'
+  attr_accessor :name, :win_against, :lose_against
+  
+  def initialize
+    self.win_against = 'rock'
+    self.lose_against = 'scissors'
+    self.name = NAME
+  end
+end
+
+class Scissors
+  NAME = 'scissors'
+  attr_accessor :name, :win_against, :lose_against
+  
+  def initialize
+    self.win_against = 'paper'
+    self.lose_against = 'rock'
+    self.name = NAME
+  end
+end
+
+class Move
+  VALUES = %w(rock paper scissors)
+  attr_accessor :value
+  
+  def initialize(value)
+    self.value = select_rps(value)
+  end
+  
+  def select_rps(value)
+    obj = nil
+    if value == 'rock'
+      obj = Rock.new
+    elsif value == 'paper'
+      obj = Paper.new
+    elsif value == 'scissors'
+      obj = Scissors.new
+    end
+    obj
+  end
+
+  def >(other_move)
+    value.win_against.include?(other_move.value.name)
+  end
+
+  def <(other_move)
+    value.lose_against.include?(other_move.value.name)
+  end
+
+  def to_s
+    @value.name
+  end
+end
+
+class Player
+  @@move_history = {}
+  attr_accessor :move, :name, :score
+
+  def initialize
+    set_name
+    reset_score
+    @@move_history[self.name] = []
+  end
+  
+  def reset_score
+    self.score = 0
+  end
+  
+  def add_move(round_result)
+    @@move_history[self.name] << [self.move.to_s, round_result]
+  end
+  
+  def self.display_players_history
+    @@move_history.each do |player, results|
+      puts "#{player} last 5 moves: "
+      puts "#{results.reverse[0, 5]}"
+    end
+  end
+  
+  def self.move_history
+    @@move_history
+  end
+end
+
+class Human < Player
+  def set_name
+    n = ""
+    loop do
+      puts "What's your name?"
+      n = gets.chomp
+      break unless n.empty?
+      puts "Sorry, must enter a value."
+    end
+    self.name = n
+  end
+
+  def choose
+    choice = ''
+    loop do
+      puts "Please choose rock, paper, or scissors:"
+      choice = gets.chomp
+      break if Move::VALUES.include?(choice)
+      puts "Sorry, invalid choice."
+    end
+    self.move = Move.new(choice)
+  end
+end
+
+class Computer < Player
+  ROCK_INDEX = 0
+  PAPER_INDEX = 1
+  SCISSORS_INDEX = 2
+  
+  attr_accessor :choices
+  
+  def initialize
+    super()
+  end
+  
+  def set_name
+    self.name = %w(R2D2 Hal Chappie Sonny Number5).sample
+    set_personality
+  end
+  
+  def set_personality
+    case self.name
+    when 'RSD2'
+      self.choices = WeightedArray.new(Move::VALUES, [100, 0, 0])
+    when 'Hal'
+      self.choices = WeightedArray.new(Move::VALUES, [20, 0, 80])
+    when 'Sonny'
+      self.choices = WeightedArray.new(Move::VALUES, [10, 80, 10])
+    when "Chappie"
+      self.choices = WeightedArray.new(Move::VALUES, [100, 100, 100])
+    when 'Number5'
+      self.choices = WeightedArray.new(Move::VALUES, [50, 0, 50])
+    end
+  end
+  
+  def choose
+    # self.move = Move.new(Move::VALUES.sample)
+    self.move = Move.new(self.choices.random_item)
+    check_history
+  end
+  
+  def check_history
+    # statistics = {rock: {win: 0, loss: 0, tie: 0}, paper: {win: 0, loss: 0, tie: 0}, scissors: {win: 0, loss: 0, tie: 0}}
+    statistics = {}
+    statistics[:rock] = check_rock_history
+    statistics[:paper] = check_paper_history
+    statistics[:scissors] = check_scissors_history
+    self.choices.decrease_weight(ROCK_INDEX, 1) if statistics[:rock][:loss] > 0.4
+    self.choices.decrease_weight(PAPER_INDEX, 1) if statistics[:paper][:loss] > 0.4
+    self.choices.decrease_weight(SCISSORS_INDEX, 1) if statistics[:scissors][:loss] > 0.4
+  end
+  
+  def check_rock_history
+    rock_wins = Player.move_history[self.name].count { |round| round == ['rock', 'won'] }
+    rock_lose = Player.move_history[self.name].count { |round| round == ['rock', 'lost']}
+    rock_tie = Player.move_history[self.name].count { |round| round == ['rock', 'tie']}
+    rock_total = rock_wins.to_f + rock_lose.to_f + rock_tie.to_f
+    {win: rock_wins / rock_total, loss: rock_lose / rock_total, tie: rock_tie / rock_total}
+  end
+  
+  def check_paper_history
+    paper_wins = Player.move_history[self.name].count { |round| round == ['paper', 'won'] }
+    paper_lose = Player.move_history[self.name].count { |round| round == ['paper', 'lost']}
+    paper_tie = Player.move_history[self.name].count { |round| round == ['paper', 'tie']}
+    paper_total = paper_wins.to_f + paper_lose.to_f + paper_tie.to_f
+    {win: paper_wins / paper_total, loss: paper_lose / paper_total, tie: paper_tie / paper_total}
+  end
+  
+  def check_scissors_history
+    scissors_wins = Player.move_history[self.name].count { |round| round == ['scissors', 'won'] }
+    scissors_lose = Player.move_history[self.name].count { |round| round == ['scissors', 'lost']}
+    scissors_tie = Player.move_history[self.name].count { |round| round == ['scissors', 'tie']}
+    scissors_total = scissors_wins.to_f + scissors_lose.to_f + scissors_tie.to_f
+    {win: scissors_wins / scissors_total, loss: scissors_lose / scissors_total, tie: scissors_tie / scissors_total}
+  end
+  
+  def display_computer_pick_chances
+    puts "---------Computer Pick Up Chances---------"
+    self.choices.to_s
+    puts "------------------------------------------"
+  end
+end
+
+# Game Orchestration Engine
+
+class RPSGame
+  attr_accessor :human, :computer
+
+  def initialize
+    @human = Human.new
+    @computer = Computer.new
+  end
+
+  def display_welcome_message
+    puts "Welcome to Rock, Paper, Scissors!"
+  end
+
+  def display_goodbye_message
+    puts "Thanks for playing Rock, Paper, Scissors. Good bye!"
+  end
+  
+  def reset_score
+    human.reset_score
+    computer.reset_score
+  end
+
+  def display_moves
+    puts "#{human.name} chose #{human.move}."
+    puts "#{computer.name} chose #{computer.move}"
+  end
+
+  def display_winner
+    if human.move > computer.move
+      puts "#{human.name} won the round!"
+    elsif human.move < computer.move
+      puts "#{computer.name} won the round!"
+    else
+      puts "It's a tie!"
+    end
+  end
+  
+  def update_score
+    if human.move > computer.move
+      human.score += 1
+    elsif human.move < computer.move
+      computer.score += 1
+    end
+  end
+  
+  def add_move_to_history
+    if human.move > computer.move
+      human.add_move('won')
+      computer.add_move('lost')
+    elsif human.move < computer.move
+      human.add_move('lost')
+      computer.add_move('won')
+    else
+      human.add_move('tie')
+      computer.add_move('tie')
+    end
+  end
+  
+  def display_history
+    puts "-----------Last 5 Moves History-----------"
+    Player.display_players_history
+    puts "------------------------------------------"
+  end
+  
+  def display_score
+    puts "------------------Score!------------------"
+    puts "#{human.name}(#{human.score})     #{computer.name}(#{computer.score})".center(44)
+    puts "------------------------------------------"
+  end
+  
+  def display_game_winner
+    if human.score == 10
+      puts "#{human.name} wins the game!"
+    elsif computer.score == 10
+      puts "#{computer.name} wins the game!"
+    end
+  end
+  
+  def game_ends?
+    human.score == 10 || computer.score == 10
+  end
+
+  def play_again?
+    answer = ""
+    loop do
+      puts "Would you like to play again? (y/n)"
+      answer = gets.chomp
+      break if %w(y n).include?(answer.downcase)
+      puts "Sorry, must choose y or n."
+    end
+
+    return false if answer.downcase == 'n'
+    return true if answer.downcase == 'y'
+  end
+
+  def play
+    display_welcome_message
+    loop do
+      reset_score
+      loop do
+        display_score
+        display_history
+        computer.display_computer_pick_chances
+        human.choose
+        computer.choose
+        display_moves
+        display_winner
+        update_score
+        add_move_to_history
+        break if game_ends?
+      end
+      display_score
+      display_game_winner
+      break unless play_again?
+    end
+    display_goodbye_message
+  end
+end
+
+RPSGame.new.play
+;T:@first_linei:@lines[xI"require 'pry';TI" ;TI"class WeightedArray;TI".  attr_accessor :array, :weights, :ranges;TI" ;TI"1  def initialize(array, weights_array = nil);TI"    self.array = array;TI"D    !weights_array ? set_weights : self.weights = weights_array;TI"    set_ranges;TI"
+  end;TI" ;TI"  def random_item;TI"C    random_value = Random.new.rand(self.ranges.last.last.to_f);TI"    random_selection = nil;TI"6    self.ranges.each_with_index do |range, index|;TI"A      if range[0] < random_value && random_value <= range[1];TI"1        random_selection = self.array[index];TI"      end;TI"    end;TI"    random_selection;TI"
+  end;TI"  ;TI"2  def increase_weight(index, units_increased);TI"/    self.weights[index] += units_increased;TI"    set_ranges;TI"  end ;TI"  ;TI"2  def decrease_weight(index, units_decreased);TI"v    self.weights[index] - units_decreased <= 0 ? self.weights[index] = 0 : self.weights[index] -= units_decreased;TI"    set_ranges;TI"
+  end;TI"  ;TI"  def set_weights;TI"    self.weights = [];TI"4    self.array.size.times {self.weights << 100};TI"
+  end;TI"  ;TI"  def set_ranges;TI"    self.ranges = [];TI"    acum = 0;TI"&    self.weights.each do |weight|;TI"      min = acum;TI"      acum += weight;TI"      max = acum;TI"$      self.ranges << [min, max];TI"    end;TI"
+  end;TI"  ;TI"  def to_s;TI"5    self.array.each_with_index do |value, index|;TI"p      puts "'#{value}' pick up chance #{(self.weights[index] / self.ranges.last.last.to_f * 100).round(2)}";TI"    end;TI"
+  end;TI"end;TI" ;TI"class Rock;TI"  NAME = 'rock';TI"7  attr_accessor :name, :win_against, :lose_against;TI"  ;TI"  def initialize;TI"&    self.win_against = 'scissors';TI"$    self.lose_against = 'paper';TI"    self.name = NAME;TI"
+  end;TI"end;TI" ;TI"class Paper;TI"  NAME = 'paper';TI"7  attr_accessor :name, :win_against, :lose_against;TI"  ;TI"  def initialize;TI""    self.win_against = 'rock';TI"'    self.lose_against = 'scissors';TI"    self.name = NAME;TI"
+  end;TI"end;TI" ;TI"class Scissors;TI"  NAME = 'scissors';TI"7  attr_accessor :name, :win_against, :lose_against;TI"  ;TI"  def initialize;TI"#    self.win_against = 'paper';TI"#    self.lose_against = 'rock';TI"    self.name = NAME;TI"
+  end;TI"end;TI" ;TI"class Move;TI"'  VALUES = %w(rock paper scissors);TI"  attr_accessor :value;TI"  ;TI"  def initialize(value);TI"'    self.value = select_rps(value);TI"
+  end;TI"  ;TI"  def select_rps(value);TI"    obj = nil;TI"    if value == 'rock';TI"      obj = Rock.new;TI"    elsif value == 'paper';TI"      obj = Paper.new;TI""    elsif value == 'scissors';TI"      obj = Scissors.new;TI"    end;TI"    obj;TI"
+  end;TI" ;TI"  def >(other_move);TI":    value.win_against.include?(other_move.value.name);TI"
+  end;TI" ;TI"  def <(other_move);TI";    value.lose_against.include?(other_move.value.name);TI"
+  end;TI" ;TI"  def to_s;TI"    @value.name;TI"
+  end;TI"end;TI" ;TI"class Player;TI"  @@move_history = {};TI")  attr_accessor :move, :name, :score;TI" ;TI"  def initialize;TI"    set_name;TI"    reset_score;TI"'    @@move_history[self.name] = [];TI"
+  end;TI"  ;TI"  def reset_score;TI"    self.score = 0;TI"
+  end;TI"  ;TI"!  def add_move(round_result);TI"D    @@move_history[self.name] << [self.move.to_s, round_result];TI"
+  end;TI"  ;TI"'  def self.display_players_history;TI"1    @@move_history.each do |player, results|;TI"*      puts "#{player} last 5 moves: ";TI"*      puts "#{results.reverse[0, 5]}";TI"    end;TI"
+  end;TI"  ;TI"  def self.move_history;TI"    @@move_history;TI"
+  end;TI"end;TI" ;TI"class Human < Player;TI"  def set_name;TI"    n = "";TI"    loop do;TI"#      puts "What's your name?";TI"      n = gets.chomp;TI"       break unless n.empty?;TI",      puts "Sorry, must enter a value.";TI"    end;TI"    self.name = n;TI"
+  end;TI" ;TI"  def choose;TI"    choice = '';TI"    loop do;TI"9      puts "Please choose rock, paper, or scissors:";TI"      choice = gets.chomp;TI"1      break if Move::VALUES.include?(choice);TI"(      puts "Sorry, invalid choice.";TI"    end;TI"%    self.move = Move.new(choice);TI"
+  end;TI"end;TI" ;TI"class Computer < Player;TI"  ROCK_INDEX = 0;TI"  PAPER_INDEX = 1;TI"  SCISSORS_INDEX = 2;TI"  ;TI"  attr_accessor :choices;TI"  ;TI"  def initialize;TI"    super();TI"
+  end;TI"  ;TI"  def set_name;TI">    self.name = %w(R2D2 Hal Chappie Sonny Number5).sample;TI"    set_personality;TI"
+  end;TI"  ;TI"  def set_personality;TI"    case self.name;TI"    when 'RSD2';TI"F      self.choices = WeightedArray.new(Move::VALUES, [100, 0, 0]);TI"    when 'Hal';TI"F      self.choices = WeightedArray.new(Move::VALUES, [20, 0, 80]);TI"    when 'Sonny';TI"G      self.choices = WeightedArray.new(Move::VALUES, [10, 80, 10]);TI"    when "Chappie";TI"J      self.choices = WeightedArray.new(Move::VALUES, [100, 100, 100]);TI"    when 'Number5';TI"F      self.choices = WeightedArray.new(Move::VALUES, [50, 0, 50]);TI"    end;TI"
+  end;TI"  ;TI"  def choose;TI"4    # self.move = Move.new(Move::VALUES.sample);TI"7    self.move = Move.new(self.choices.random_item);TI"    check_history;TI"
+  end;TI"  ;TI"  def check_history;TI"{    # statistics = {rock: {win: 0, loss: 0, tie: 0}, paper: {win: 0, loss: 0, tie: 0}, scissors: {win: 0, loss: 0, tie: 0}};TI"    statistics = {};TI"/    statistics[:rock] = check_rock_history;TI"1    statistics[:paper] = check_paper_history;TI"7    statistics[:scissors] = check_scissors_history;TI"V    self.choices.decrease_weight(ROCK_INDEX, 1) if statistics[:rock][:loss] > 0.4;TI"X    self.choices.decrease_weight(PAPER_INDEX, 1) if statistics[:paper][:loss] > 0.4;TI"^    self.choices.decrease_weight(SCISSORS_INDEX, 1) if statistics[:scissors][:loss] > 0.4;TI"
+  end;TI"  ;TI"  def check_rock_history;TI"^    rock_wins = Player.move_history[self.name].count { |round| round == ['rock', 'won'] };TI"^    rock_lose = Player.move_history[self.name].count { |round| round == ['rock', 'lost']};TI"\    rock_tie = Player.move_history[self.name].count { |round| round == ['rock', 'tie']};TI"E    rock_total = rock_wins.to_f + rock_lose.to_f + rock_tie.to_f;TI"`    {win: rock_wins / rock_total, loss: rock_lose / rock_total, tie: rock_tie / rock_total};TI"
+  end;TI"  ;TI"  def check_paper_history;TI"`    paper_wins = Player.move_history[self.name].count { |round| round == ['paper', 'won'] };TI"`    paper_lose = Player.move_history[self.name].count { |round| round == ['paper', 'lost']};TI"^    paper_tie = Player.move_history[self.name].count { |round| round == ['paper', 'tie']};TI"I    paper_total = paper_wins.to_f + paper_lose.to_f + paper_tie.to_f;TI"f    {win: paper_wins / paper_total, loss: paper_lose / paper_total, tie: paper_tie / paper_total};TI"
+  end;TI"  ;TI"!  def check_scissors_history;TI"f    scissors_wins = Player.move_history[self.name].count { |round| round == ['scissors', 'won'] };TI"f    scissors_lose = Player.move_history[self.name].count { |round| round == ['scissors', 'lost']};TI"d    scissors_tie = Player.move_history[self.name].count { |round| round == ['scissors', 'tie']};TI"U    scissors_total = scissors_wins.to_f + scissors_lose.to_f + scissors_tie.to_f;TI"x    {win: scissors_wins / scissors_total, loss: scissors_lose / scissors_total, tie: scissors_tie / scissors_total};TI"
+  end;TI"  ;TI"(  def display_computer_pick_chances;TI":    puts "---------Computer Pick Up Chances---------";TI"    self.choices.to_s;TI":    puts "------------------------------------------";TI"
+  end;TI"end;TI" ;TI" # Game Orchestration Engine;TI" ;TI"class RPSGame;TI"&  attr_accessor :human, :computer;TI" ;TI"  def initialize;TI"    @human = Human.new;TI"!    @computer = Computer.new;TI"
+  end;TI" ;TI""  def display_welcome_message;TI"1    puts "Welcome to Rock, Paper, Scissors!";TI"
+  end;TI" ;TI""  def display_goodbye_message;TI"C    puts "Thanks for playing Rock, Paper, Scissors. Good bye!";TI"
+  end;TI"  ;TI"  def reset_score;TI"    human.reset_score;TI"    computer.reset_score;TI"
+  end;TI" ;TI"  def display_moves;TI"2    puts "#{human.name} chose #{human.move}.";TI"7    puts "#{computer.name} chose #{computer.move}";TI"
+  end;TI" ;TI"  def display_winner;TI"&    if human.move > computer.move;TI".      puts "#{human.name} won the round!";TI")    elsif human.move < computer.move;TI"1      puts "#{computer.name} won the round!";TI"    else;TI"      puts "It's a tie!";TI"    end;TI"
+  end;TI"  ;TI"  def update_score;TI"&    if human.move > computer.move;TI"      human.score += 1;TI")    elsif human.move < computer.move;TI"      computer.score += 1;TI"    end;TI"
+  end;TI"  ;TI"  def add_move_to_history;TI"&    if human.move > computer.move;TI"       human.add_move('won');TI"$      computer.add_move('lost');TI")    elsif human.move < computer.move;TI"!      human.add_move('lost');TI"#      computer.add_move('won');TI"    else;TI"       human.add_move('tie');TI"#      computer.add_move('tie');TI"    end;TI"
+  end;TI"  ;TI"  def display_history;TI":    puts "-----------Last 5 Moves History-----------";TI"'    Player.display_players_history;TI":    puts "------------------------------------------";TI"
+  end;TI"  ;TI"  def display_score;TI":    puts "------------------Score!------------------";TI"`    puts "#{human.name}(#{human.score})     #{computer.name}(#{computer.score})".center(44);TI":    puts "------------------------------------------";TI"
+  end;TI"  ;TI"  def display_game_winner;TI"    if human.score == 10;TI".      puts "#{human.name} wins the game!";TI"#    elsif computer.score == 10;TI"1      puts "#{computer.name} wins the game!";TI"    end;TI"
+  end;TI"  ;TI"  def game_ends?;TI"2    human.score == 10 || computer.score == 10;TI"
+  end;TI" ;TI"  def play_again?;TI"    answer = "";TI"    loop do;TI"5      puts "Would you like to play again? (y/n)";TI"      answer = gets.chomp;TI"5      break if %w(y n).include?(answer.downcase);TI",      puts "Sorry, must choose y or n.";TI"    end;TI" ;TI"/    return false if answer.downcase == 'n';TI".    return true if answer.downcase == 'y';TI"
+  end;TI" ;TI"  def play;TI"     display_welcome_message;TI"    loop do;TI"      reset_score;TI"      loop do;TI"        display_score;TI"        display_history;TI"3        computer.display_computer_pick_chances;TI"        human.choose;TI"        computer.choose;TI"        display_moves;TI"        display_winner;TI"        update_score;TI"         add_move_to_history;TI"         break if game_ends?;TI"      end;TI"      display_score;TI"      display_game_winner;TI"#      break unless play_again?;TI"    end;TI"     display_goodbye_message;TI"
+  end;TI"end;TI" ;TI"RPSGame.new.play;T" :@line_begins[x[iwi$[iviö#[iuiõ#[itiñ#[isië#[iriÏ#[iqiÇ#[ipi¨#[ioiŽ#[iniz#[imip#[iliT#[iki8#[iji##[iii#[ihiö"[igiÞ"[ifiÉ"[ieiš"[idi‚"[icil"[ibi^"[iaiL"[i`i@"[i_i$"[i^i"[i]i"[i\i"[i[iè![iZi½![iYi¼![iXi´![iWiŒ![iVi[![iUiA![iTi![iSi![iRiô [iQiâ [iPiá [iOiÛ [iNi­ [iMiœ [iLi™ [iKi“ [iJi‹ [iIi^ [iHi? [iGi [iFiü[iEiâ[iDiß[iCiÙ[iBi£[iAiG[i@i[i?iý[i>iú[i=iô[i<i¾[i;i›[i:ie[i9iO[i8iL[i7iF[i6i>[i5i[i4i[i3iú[i2iÛ[i1i¾[i0i™[i/iy[i.i][i-i;[i,i![i+i[i*i[i)i[i(iö[i'iÑ[i&iº[i%i˜[i$i…[i#i‚[i"i|[i!it[i i[[iiR[ii%[ii [iiÖ[ii´[iiŸ[iiž[ii˜[iie[ii7[ii#[ii"[ii[ii[iií[iiÛ[iiØ[iiÒ[ii“[iiu[iit[i
+in[i	iA[ii#[ii"[ii[iiÿ[iiè[ii×[iiÖ[ii´[i i¦[iÿi¥[iþi‰[iýiˆ[iüi„[iûi~[iúiH[iùi2[iøiü[i÷iØ[iöiÕ[iõiÏ[iôi[[iói
+[iòiª[iñiH[iðiæ[iïiÉ[iîiÆ[iíiÀ[iìi^[iëi[iêi¿[iéic[ièi[içií[iæiê[iåiä[iäiˆ[iãiG[iâiï[iái•[iài;[ißi"[iÞi[iÝi[iÜi¿[iÛik[iÚi[iÙiæ[iØi¹[i×iŽ[iÖiz[iÕiþ[iÔiê[iÓiç[iÒiá[iÑiÏ[iÐiœ[iÏil[iÎi_[iÍi\[iÌiV[iËiN[iÊi[iÉiù[iÈi³[iÇi [iÆi][iÅiL[iÄi
+[iÃiû[iÂi¹[iÁi©[iÀi–[i¿i€[i¾i}[i½iw[i¼ic[i»i)[iºi[i¹i[i¸i[i·i[i¶iô[iµiñ[i´iØ[i³iÕ[i²iÀ[i±i®[i°i[i¯i…[i®i„[i­i€[i¬iz[i«iY[iªiQ[i©i-[i¨i [i§iæ[i¦i±[i¥i¥[i¤i•[i£iˆ[i¢i‡[i¡i[i io[iŸig[iži?[ii#[iœi[i›iï[išiã[i™iØ[i˜iÉ[i—i´[i–i³[i•i¯[i”i©[i“i–[i’i~[i‘i{[iiu[iim[iŽiG[ii![iŒiô
+[i‹iÑ
+[iŠiÎ
+[i‰iÈ
+[iˆiˆ
+[i‡ik
+[i†ih
+[i…ib
+[i„iO
+[iƒi=
+[i‚i:
+[ii4
+[i€i
+[ii
+[i~iô	[i}iã	[i|iâ	[i{i½	[ii§	[i~iš	[i}i™	[i|i•	[i{i	[izi	[iyit	[ixis	[iwim	[ivi6	[iui"	[iti!	[isi	[iriå[iqiÑ[ipiÐ[ioiÊ[iniÂ[imiº[ili¡[ikiƒ[ijim[iiiR[ihi=[igi&[ifi[iei [idiý[ici÷[ibiÔ[iai¼[i`i¹[i_i¢[i^i[i]it[i\is[i[io[iZii[iYiT[iXi5[iWi[iVi[iUi[iTiÏ[iSi»[iRi¬[iQi«[iPi§[iOi¡[iNiŒ[iMii[iLiK[iKi:[iJi7[iIi[iHió[iGiç[iFiæ[iEiâ[iDiÜ[iCiÇ[iBi§[iAi…[i@it[i?iq[i>i>[i=i.[i<i#[i;i"[i:i[i9i[i8i[i7i¤[i6is[i5ih[i4ie[i3i_[i2iW[i1i7[i0i&[i/i[i.i [i-iÞ[i,iÑ[i+i¼[i*i«[i)i¨[i(i¢[i'ir[i&i\[i%iJ[i$iG[i#iA[i"i2[i!iÀ[i i’[ii[iiˆ[iiy[iiN[ii [ii[ii[ii[iiú[iið[iiÃ[ii†[iiT[ii9[iiú[iiè[iiç[iiá[iiÒ[ii’[ii{[i
+iS[i	iR[ii([ii[ii[i i :@end_posiï:@begin_posiì:@messageI"OAssignment Branch Condition size for check_history is too high. [18.68/18];T:@cop_nameI"Metrics/AbcSize;F:@status:unsupportedo; 
+;o;;;	;
+o;;@
+;i';i$;I"TAssignment Branch Condition size for check_rock_history is too high. [23.35/18];T;@û;;o; 
+;o;;;	;
+o;;@
+;iò;iï;I"UAssignment Branch Condition size for check_paper_history is too high. [23.35/18];T;@û;;o; 
+;o;;;	;
+o;;@
+;iÎ;iË;I"XAssignment Branch Condition size for check_scissors_history is too high. [23.35/18];T;@û;;o; 
+;o;;;	;
+o;;@
+;i&;i#;I"UAssignment Branch Condition size for add_move_to_history is too high. [22.09/18];T;@û;;o; 
+;o;;;	;
+o;;@
+;i";i";I"EAssignment Branch Condition size for play is too high. [21.1/18];T;@û;;o; 
+;o;;;	;
+@;I"'Method has too many lines. [20/15];T;I"Metrics/MethodLength;F;;o; 
+;o;;;	;
+o;;@
+;i·	;i©	;I"@Replace class var @@move_history with a class instance var.;T;I"Style/ClassVars;F;;o; 
+;o;;;	;
+o;;@
+;i(;i;I"Redundant `self` detected.;T;I"Style/RedundantSelf;F;:uncorrectedo; 
+;o;;;	;
+o;;@
+;ic;iX;@;@;;o; 
+;o;;;	;
+o;;@
+;iè;iÞ;@;@;;o; 
+;o;;;	;
+o;;@
+;i^;iR;@;@;;o; 
+;o;;;	;
+o;;@
+;iÐ;iÄ;@;@;;o; 
+;o;;;	;
+o;;@
+;iý;iñ;@;@;;o; 
+;o;;;	;
+o;;@
+;i;i;@;@;;o; 
+;o;;;	;
+o;;@
+;i€;iv;@;@;;o; 
+;o;;;	;
+o;;@
+;i™;i;@;@;;o; 
+;o;;;	;
+o;;@
+;iî;iâ;@;@;;o; 
+;o;;;	;
+o;;@
+;iH;i=;@;@;;o; 
+;o;;;	;
+o;;@
+;i;iw;@;@;;o; 
+;o;;;	;
+o;;@
+;iÙ;iÍ;@;@;;o; 
+;o;;;	;
+o;;@
+;iî;iã;@;@;;o; 
+;o;;;	;
+o;;@
+;i-
+;i$
+;@;@;;o; 
+;o;;;	;
+o;;@
+;i¤
+;i›
+;@;@;;o; 
+;o;;;	;
+o;;@
+;i³
+;iª
+;@;@;;o; 
+;o;;;	;
+o;;@
+;i¨;iŸ;@;@;;o; 
+;o;;;	;
+o;;@
+;iÁ;iµ;@;@;;o; 
+;o;;;	;
+o;;@
+;i);i;@;@;;o; 
+;o;;;	;
+o;;@
+;i{;io;@;@;;o; 
+;o;;;	;
+o;;@
+;iÏ;iÃ;@;@;;o; 
+;o;;;	;
+o;;@
+;ih;i_;@;@;;o; 
+;o;;;	;
+o;;@
+;iÂ;i¹;@;@;;o; 
+;o;;;	;
+o;;@
+;i;i;@;@;;o; 
+;o;;;	;
+o;;@
+;i5;i,;@;@;;o; 
+;o;;;	;
+o;;@
+;i‘;iˆ;@;@;;o; 
+;o;;;	;
+o;;@
+;iì;iã;@;@;;o; 
+;o;;;	;
+o;;@
+;i;i;@;@;;o; 
+;o;;;	;
+o;;@
+;iy;ip;@;@;;o; 
+;o;;;	;
+o;;@
+;iÚ;iÑ;@;@;;o; 
+;o;;;	;
+o;;@
+;iB;i6;@;@;;o; 
+;o;;;	;
+o;;@
+;iŽ;i;I"Space missing inside {.;T;I"!Style/SpaceInsideBlockBraces;F;;o; 
+;o;;;	;
+o;;@
+;i¡;i ;I"Space missing inside }.;T;@;;o; 
+;o;;;	;
+o;;@
+;iî;ií;I"Space missing inside }.;T;@;;o; 
+;o;;;	;
+o;;@
+;iF;iE;I"Space missing inside }.;T;@;;o; 
+;o;;;	;
+o;;@
+;i¾;i½;I"Space missing inside }.;T;@;;o; 
+;o;;;	;
+o;;@
+;i;i;I"Space missing inside }.;T;@;;o; 
+;o;;;	;
+o;;@
+;i©;i¨;I"Space missing inside }.;T;@;;o; 
+;o;;;	;
+o;;@
+;i	;i;I"Space missing inside }.;T;@;;o; 
+;o;;;	;
+o;;@
+;i;iŒ;I"Space inside { missing.;T;I"'Style/SpaceInsideHashLiteralBraces;F;;o; 
+;o;;;	;
+o;;@
+;iã;iâ;I"Space inside } missing.;T;@ ;;o; 
+;o;;;	;
+o;;@
+;ic;ib;I"Space inside { missing.;T;@ ;;o; 
+;o;;;	;
+o;;@
+;i¿;i¾;I"Space inside } missing.;T;@ ;;o; 
+;o;;;	;
+o;;@
+;i`;i_;I"Space inside { missing.;T;@ ;;o; 
+;o;;;	;
+o;;@
+;iÎ;iÍ;I"Space inside } missing.;T;@ ;;o; 
+;o;;;	;
+o;;@
+;i;i;I""Trailing whitespace detected.;T;I"Style/TrailingWhitespace;F;;o; 
+;o;;;	;
+o;;@
+;iŽ;i;@¸;@¹;;o; 
+;o;;;	;
+o;;@
+;i‘;i;@¸;@¹;;o; 
+;o;;;	;
+o;;@
+;iI;iG;@¸;@¹;;o; 
+;o;;;	;
+o;;@
+;iª;i¨;@¸;@¹;;o; 
+;o;;;	;
+o;;@
+;ig;ie;@¸;@¹;;o; 
+;o;;;	;
+o;;@
+;is;iq;@¸;@¹;;o; 
+;o;;;	;
+o;;@
+;i9;i7;@¸;@¹;;o; 
+;o;;;	;
+o;;@
+;i;i;@¸;@¹;;o; 
+;o;;;	;
+o;;@
+;i»;i¹;@¸;@¹;;o; 
+;o;;;	;
+o;;@
+;iÿ;iý;@¸;@¹;;o; 
+;o;;;	;
+o;;@
+;i<
+;i:
+;@¸;@¹;;o; 
+;o;;;	;
+o;;@
+;ij
+;ih
+;@¸;@¹;;o; 
+;o;;;	;
+o;;@
+;iÐ
+;iÎ
+;@¸;@¹;;o; 
+;o;;;	;
+o;;@
+;i};i{;@¸;@¹;;o; 
+;o;;;	;
+o;;@
+;i×;iÕ;@¸;@¹;;o; 
+;o;;;	;
+o;;@
+;ió;iñ;@¸;@¹;;o; 
+;o;;;	;
+o;;@
+;i;i;@¸;@¹;;o; 
+;o;;;	;
+o;;@
+;i;i};@¸;@¹;;o; 
+;o;;;	;
+o;;@
+;i^;i\;@¸;@¹;;o; 
+;o;;;	;
+o;;@
+;ié;iç;@¸;@¹;;o; 
+;o;;;	;
+o;;@
+;i!;i;@¸;@¹;;o; 
+;o;;;	;
+o;;@
+;iì;iê;@¸;@¹;;o; 
+;o;;;	;
+o;;@
+;iÈ;iÆ;@¸;@¹;;o; 
+;o;;;	;
+o;;@
+;i×;iÕ;@¸;@¹;;o; 
+;o;;;	;
+o;;@
+;iÚ;iØ;@¸;@¹;;o; 
+;o;;;	;
+o;;@
+;i„;i‚;@¸;@¹;;o; 
+;o;;;	;
+o;;@
+;i ;i;@¸;@¹;;o; 
+;o;;;	;
+o;;@
+;iN;iL;@¸;@¹;;o; 
+;o;;;	;
+o;;@
+;iü;iú;@¸;@¹;;o; 
+;o;;;	;
+o;;@
+;iá;iß;@¸;@¹;;o; 
+;o;;;	;
+o;;@
+;i› ;i™ ;@¸;@¹;;{I"Metrics/AbcSize;F[ I"Metrics/MethodLength;F[ I"Style/ClassVars;F[ I"Style/RedundantSelf;F[ I"!Style/SpaceInsideBlockBraces;F[ I"'Style/SpaceInsideHashLiteralBraces;F[ I"Style/TrailingWhitespace;F[ [o:Parser::Source::Comment;
+o:Parser::Source::Map:@expressiono;;@
+;i›;ip:
+@textI"0# self.move = Move.new(Move::VALUES.sample);To;;
+o;;o;;@
+;iy;i;I"|# statistics = {rock: {win: 0, loss: 0, tie: 0}, paper: {win: 0, loss: 0, tie: 0}, scissors: {win: 0, loss: 0, tie: 0}};To;;
+o;;o;;@
+;i¤;i‰;I" # Game Orchestration Engine;T

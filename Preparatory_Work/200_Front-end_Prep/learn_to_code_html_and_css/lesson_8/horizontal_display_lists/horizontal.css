@@ -1,0 +1,5 @@
+li {
+    /*display: inline-block;*/ /*Use this if the list marker are not needed*/
+    float: left; /*Use this if the list marker is needed*/
+    margin: 0 20px;
+}

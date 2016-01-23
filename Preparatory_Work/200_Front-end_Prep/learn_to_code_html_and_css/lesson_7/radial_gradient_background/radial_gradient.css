@@ -1,0 +1,8 @@
+div {
+    background: #466368;
+    background: -webkit-radial-gradient(#648880, #293f50);
+    background: -moz-radial-gradient(#648880, #293f50);
+    background: radial-gradient(#648880, #293f50);
+    height: 120px;
+    border-radius: 6px;
+}

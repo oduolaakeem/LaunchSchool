@@ -1,0 +1,51 @@
+keyword	  meaning
+
+START	                start of the program
+SET	                  sets a variable we can use for later
+GET	                  retrieve input from user
+PRINT	                displays output to user
+READ	                retrieve value from variable
+IF / ELSE IF / ELSE	  show conditional branches in logic
+WHILE	                show looping logic
+END	                  end of the program
+
+example 1: A method that returns the sum of two integers
+
+START
+
+SET number1 = GET number from user
+SET number2 = GET number from user
+
+SET result = number1 + number 2
+
+PRINT result
+
+END
+
+example 2: A method that takes an array of strings, and returns a string that is all those string concatenated together
+
+START
+
+SET iterator = 1
+SET string = empty
+
+WHILE iterator < array_of_strings length
+  SET string = string + array_of_strings(iterator position)
+
+PRINT string
+
+END
+
+example 3: A method that takes an array of integers, and returns a new array with every other element
+
+START
+
+SET iterator = 1
+SET empty array new_array
+
+WHILE iterator < array_of_integers
+  ADD array_of_integers(iterator) to new_array
+  
+PRINT new_array
+
+END

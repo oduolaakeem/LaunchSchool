@@ -1,0 +1,13 @@
+div {
+    background: url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/29841/shay_1.jpg") 0 0 no-repeat;
+    /*background-size: auto 75%;*/
+    background-size: cover;
+    /*background-size: contain;*/
+    /*background-clip: padding-box;*/
+    /*background-clip: border-box;*/
+    background-clip: content-box;
+    border: 2px dashed #9799a7;
+    height: 240px;
+    width: 200px;
+    padding: 5px;
+}

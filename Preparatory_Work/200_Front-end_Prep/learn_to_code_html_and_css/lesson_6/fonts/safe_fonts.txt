@@ -1,0 +1,14 @@
+Web-Safe Fonts. 
+
+This is the list of the safest web-safe fonts.
+
+    - Arial
+    - Courier New, Courier
+    - Garamond
+    - Georgia
+    - Lucida Sans, Lucida Grande, Lucida
+    - Palatino Linotype
+    - Tahoma
+    - Times New Roman, Times
+    - Trebuchet
+    - Verdana

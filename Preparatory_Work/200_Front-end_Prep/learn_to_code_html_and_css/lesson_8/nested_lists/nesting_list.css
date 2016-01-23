@@ -1,0 +1,9 @@
+ul {
+    list-style: disc;
+    padding-left: 40px;
+}
+
+ol {
+    list-style: decimal;
+    padding-left: 40px;
+}
