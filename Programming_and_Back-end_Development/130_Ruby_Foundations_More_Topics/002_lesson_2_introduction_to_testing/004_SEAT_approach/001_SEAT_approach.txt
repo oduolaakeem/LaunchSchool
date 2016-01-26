@@ -1,0 +1,7 @@
+In the previous assignments, we've been quickly diving down into the tests and
+assertions, but in larger projects, there are usually 4 steps to writing a test:
+
+1. Set up the necessary objects.
+2. Execute the code against the object we're testing.
+3. Assert the results of the execution.
+4. Tear down and clean up any lingering artifacts.
