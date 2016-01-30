@@ -2,9 +2,9 @@ class Series
   def initialize(string)
     @digits = string
   end
-  
+
   def slices(length)
-    raise ArgumentError unless length <= @digits.size
+    fail ArgumentError unless length <= @digits.size
     series = []
     (0..(@digits.size - length)).each do |start_index|
       serie = []
