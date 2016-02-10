@@ -1,0 +1,547 @@
+1. Explain the relationship between classes and objects. Use code to illustrate
+your explanation.
+
+Classes are the template from where you can create objects. Then the 
+objects are just an instance of the class, so they belong to the class from
+they have been created. In the class you declare or define the variables (features)
+and behaviors(methods) the objects from that class will have.
+
+```ruby
+class Car
+  def initialize(model, year, color)
+    @model = model
+    @year = year
+    @color = color
+  end
+end
+
+my_brand_new_car = Car("Lexus", 2016, "Red")
+```
+
+In the code above you can see how from the class "Car" you can keep creating
+a bunch of objects that will be have the features given by that class. At the 
+end of the code you see how i create(instanciate) an object from the "Car" class.
+
+2. Explain what class inheritance is. Use code to illustrate your explanation.
+
+Class inheritance is used to pass in attributes and behaviors from another class.
+This in a way a hierarchy is created, the child or subclass will 
+inherit the attributes and behaviors from the superclass. This is explained
+by the code below:
+
+```ruby
+class Car
+  WHEELS = 4
+  
+  def initialize(model, year, color)
+    @speed = 0
+    @model = model
+    @year = year
+    @color = color
+  end
+  
+  def accelerate(number)
+    @speed += number
+  end
+  
+  def decelerate(number)
+    @speed -= number
+  end
+end
+
+class Truck < Car
+  def initialize(model, year, color)
+    @four_wheel_drive = false
+    super(model, year, color)
+  end
+  
+  def enable_4wd
+    @four_wheel_drive = true
+  end
+  
+  def disable_4wd
+    @four_wheel_drive = false
+  end
+end
+```
+
+In the code above, you can see how the Truck subclass inherits attributes and
+behaviors from the Car class. This is useful when you have a generic class
+and some more specific classes that have something in common that you can share.
+
+3. How does Ruby handle the problem of multiple inheritance? Explain how this
+modifies the method lookup chain. Use code to illustrate your explanation.
+
+Ruby handles the multiple inheritance through modules. In the modules you can 
+declare or define attributes and behaviors and then include them in any class
+you need them.
+
+The method lookup chain will look first for the method in the class, then will
+proceed to search in the last module that was included, all the way until the
+first one, after checking in all the modules it will proceed to look into
+all the parent/superclasses. This is explained in the code below:
+
+```ruby
+module RearWindshield
+  attr_accessor :rear_windshield_dirty
+  
+  def clean
+    @rear_windshield_dirty = false if @rear_windshield_dirty == true
+  end
+end
+
+module HandBreak
+  attr_accessor :handbrake
+  
+  def apply_handbrake
+    @handbrake = true
+  end
+  
+  def release_handbrake
+    @handbrake = false
+  end
+end
+
+class Car
+  WHEELS = 4
+  
+  def initialize(model, year, color)
+    @speed = 0
+    @model = model
+    @year = year
+    @color = color
+  end
+  
+  def accelerate(number)
+    @speed += number
+  end
+  
+  def decelerate(number)
+    @speed -= number
+  end
+end
+
+class Truck < Car
+  include HandBreak
+  include RearWindshield
+  
+  def initialize(model, year, color)
+    @four_wheel_drive = false
+    @handbrake = false
+    super(model, year, color)
+  end
+  
+  def enable_4wd
+    @four_wheel_drive = true
+  end
+  
+  def disable_4wd
+    @four_wheel_drive = false
+  end
+end
+```
+
+So in the Truck class, if we check how the method lookup chain is, we call the
+ancestors method on the class and we see how it looks, in order from to to
+bottom:
+  Truck             (class)
+  RearWindshield    (last module included)
+  HandBreak         (first module included)
+  Car               (superclass or parent class of Truck class)
+  Object            (superclass or parent class of Car class)
+  Kernel            (superclass or parent class of Object class)
+  BasicObject]      (superclass or parent class of Kernel class)
+  
+4. What's the difference between a class and a module?
+
+The class can be instanciated (create objects that belongs to the class). It is
+not possible to instanciate/create objects from a module.
+
+5. What's the whole point of Object Oriented Programming? Pros and cons of OOP?
+
+The point of Object Oriented Programming is that it brings another level of 
+abstraction when programming, it let you create or abstract real world
+objects into the programs and work with them so solve problems.
+
+Pros:
+  - Modularity, you can split the problem in chunks of codes organized with
+  classes, objects, modules, etc.
+  - Level of abstraction, it is almost like working with real objects. Just that
+  you simplify them a little bit when creating in the program.
+  
+Cons:
+  - Could become more complex in some cases, because the way the classes are 
+  organized could become a little bit tricky.
+  
+6. What does the phrase "OO Design" mean?
+
+Object Oriented Design mean the way you setup the classes, modules and objects,
+like the architecture of the program, how the objects will communicate with
+each other(interfaces).
+
+7. Explain why the last line in the below code outputs "bob". What are two
+possible ways to fix the change_info method so that it executes correctly?
+
+```ruby
+class Person
+  attr_accessor :name
+
+  def initialize(n)
+    @name = n
+  end
+
+  def change_info(new_name)
+      name = new_name         # invoking the setter method
+  end
+end
+
+bob = Person.new('bob')
+bob.change_info('Robert')
+
+puts bob.name
+```
+That happens because in the object method "change_info", when assigning `new_name`
+to `name`, `name` is a local variable in the method scope, so the object variable
+@name was not changed to the new value.
+
+  - One way to fix it is replacing `name` for the object variable `@name`. the new
+  line looks like `@name = new_name`.
+  - A second way to fix it is using the 'self' keyword. So the line will be changed
+  to `self.name = new_name`.
+  
+8. Use the Person class below, and create a class method called
+total_people, and have it return the total number of Person objects created.
+
+Before changes made
+```ruby
+class Person
+  def initialize(name, weight, height)
+    @name = name
+    @weight = weight
+    @height = height
+  end
+end
+
+bob = Person.new('bob', 185, 70)
+Person.total_people       # this should return 1
+```
+
+After making changes
+```ruby
+class Person
+  @@total_people = 0
+  
+  def self.total_people
+    @@total_people
+  end
+  
+  def initialize(name, weight, height)
+    @@total_people += 1
+    @name = name
+    @weight = weight
+    @height = height
+  end
+end
+
+bob = Person.new('bob', 185, 70)
+Person.total_people       # this should return 1
+```
+
+9. Take the answer from the question above, and add a getter/setter for
+name, weight and height.
+
+```ruby
+class Person
+  @@total_people = 0
+  attr_accessor :name, :weight, :height
+  
+  def self.total_people
+    @@total_people
+  end
+  
+  def initialize(name, weight, height)
+    @@total_people += 1
+    @name = name
+    @weight = weight
+    @height = height
+  end
+end
+
+bob = Person.new('bob', 185, 70)
+Person.total_people       # this should return 1
+```
+
+10. Continuing on from the answer in the previous question, add a
+change_info(name, weight, height) instance method that can modify
+the object's 3 attributes all at once. Use the setter methods
+(as opposed to referencing the instance variables directly).
+
+```ruby
+class Person
+  @@total_people = 0
+  attr_accessor :name, :weight, :height
+  
+  def self.total_people
+    @@total_people
+  end
+  
+  def initialize(name, weight, height)
+    @@total_people += 1
+    @name = name
+    @weight = weight
+    @height = height
+  end
+  
+  def change_info(name, weight, height)
+    self.name = name
+    self.weight = weight
+    self.height = height
+  end
+end
+
+bob = Person.new('bob', 185, 70)
+Person.total_people       # this should return 1
+```
+
+11. Looking at the final code of the previous question, describe why self
+can be used both to define a class method and invoke an instance method.
+Explain how self works here.
+
+It can be used in both places because each of those are different situations, and
+self will mean different according to it.
+
+  - When used for the class method definition, self will be the class itself, so it 
+  is the same as saying `def Person.total_people` than `def self.total_people`.
+
+  - When used inside an instance method `self` will be the object that is
+  calling the method, in that way the setter/getter methods can be accessed. in the
+  Person class example, when you call inside the method `self.name = name` when you
+  call `bob.change_info('Robert', 186, 60)` the `self.name` it is the same as
+  `bob.name`, and the same with the other instance variables that have defined
+  an setter/getter method.
+  
+12. Create classes based on the following description of a "Employee
+Management Application". Only need the classes, instance
+variables, and methods. No need for any actual implementation.
+
+Descrption:
+The employee management application should keep track of all employees in
+the company. Employees are divided into "full time" or "part time".
+All employees have a name and serial number.
+All full-time employees have at least 10 days of vacation; executives get
+20 days, while managers get 14 days. Part-time employees don't get vacations.
+All full-time employees are assigned to a desk, but managers get an
+office, and executives get a corner office. Part-time employees work
+in the open workspace with no reserved desk. Anytime we're displaying
+the employee name, we need to prefix "Mgr" if the employee is a
+manager, and "Exe" if the employee is an executive. Managers and
+executives can also delegate work, while regular employees can't.
+
+```ruby
+module DelegateWork
+  def delegate_work(employee, task_description)
+    employee.delegated_work << [task_description, self.name]
+  end
+end
+
+class Employee
+  attr_accessor :serial_number, :delegated_work
+  
+  def initialize(name)
+    @name = name
+  end
+  
+  def name
+    @name
+  end
+end
+
+class FullTimeEmployee < Employee
+  attr_accessor :vacation_days, :desk_number
+end
+
+class PartTimeEmployee < Employee
+end
+
+class Manager < FullTimeEmployee
+  attr_accessor :office_number
+  
+  include DelegateWork
+  
+  def name
+    "Mgr. " + @name
+  end
+end
+
+class Executive < FullTimeEmployee
+  attr_accessor :corner_office_number
+  
+  include DelegateWork
+  
+  def name
+    "Exe. " + @name
+  end
+end
+```
+
+13. Write a simple calculator program using OOP. This problem is open ended
+on purpose. Do your best and make some assumptions. We'll talk about
+this code during the interview.
+
+```ruby
+class Calculator
+  def initialize
+    clear
+  end
+  
+  def add(number2, number1 = @first_number)
+    @result = number1 + number2
+    @first_number = @result
+  end
+  
+  def substract(number2, number1 = @first_number)
+    @result = number1 - number2
+    @first_number = @result
+  end
+  
+  def multiply(number2, number1 = @first_number)
+    @result = number1 * number2
+    @first_number = @result
+  end
+  
+  def divide(number2, number1 = @first_number)
+    @result = number1 / number2
+    @first_number = @result
+  end
+  
+  def clear
+    @first_number = 0
+    @result = 0
+  end
+  
+  def result
+    @result
+  end
+end
+```
+
+******************************************************************************
+Blocks
+
+1. Explain what a closure is, and why do we say that it's at the core
+of understanding local variable scope?
+
+A clousure is a concept that allow saving a piece of code, and then being
+able to call it on a later time.
+
+It is at the core of understanding local variable scope because the clousures
+defined in the programs will create its own variable scope, so you need to be
+aware of this in order to avoid confusion, shadowing and errors when using
+the different clousures/blocks.
+
+2. Explain the 2 major use cases for implementing a method that
+can take a block. Use code to illustrate your explanation.
+
+  a. working with collection objects, so we can perform operations on each
+  one of the elements, and willing to maintain the operation open to modification
+  by the user.
+  
+  ```ruby
+    [1,2,3].map! { |value| value * 2 }
+  ```
+  
+  b. 
+  
+******************************************************************************
+Testing
+
+1. What's the difference between MiniTest and RSpec?
+
+MiniTest have both assert-style (use assertion expressions) and spec-style
+testing (or expectation syntax). RSpec is a testing platform more oriented to 
+only use spec-style testing.
+
+2. Explain what assert_equal does. How does it test for equality?
+
+assert_equal is the same as invoking the "==" method on the objects to test the
+equality.
+
+3. Write a test suite for your calculator app from before. We'll talk about
+this code during the interview.
+
+Calculator code
+
+```ruby
+class Calculator
+  def initialize
+    clear
+  end
+  
+  def add(number2, number1 = @first_number)
+    @result = number1 + number2
+    @first_number = @result
+  end
+  
+  def substract(number2, number1 = @first_number)
+    @result = number1 - number2
+    @first_number = @result
+  end
+  
+  def multiply(number2, number1 = @first_number)
+    @result = number1 * number2
+    @first_number = @result
+  end
+  
+  def divide(number2, number1 = @first_number)
+    @result = number1 / number2
+    @first_number = @result
+  end
+  
+  def clear
+    @first_number = 0
+    @result = 0
+  end
+  
+  def result
+    @result
+  end
+end
+```
+
+Calculator Test Code
+
+```ruby
+require 'minitest/autorun'
+require 'minitest/reporters'
+Minitest::Reporters.use!
+
+require_relative 'calculator'
+
+class CalculatorTest < Minitest::Test
+  def setup
+    @calculator = Calculator.new
+  end
+  
+  def test_addition
+    assert_equal(2, (@calculator.add(1, 1)))
+  end
+  
+  def test_substraction
+    assert_equal(0, (@calculator.substract(1, 1)))
+  end
+  
+  def test_multiplication
+    assert_equal(20, (@calculator.multiply(4, 5)))
+  end
+  
+  def test_division
+    assert_equal(5, (@calculator.divide(4, 20)))
+  end
+  
+  def test_divide_by_zero
+    assert_raises(ZeroDivisionError) { @calculator.divide(0, 20) }
+  end
+end
+```
+
+******************************************************************************
