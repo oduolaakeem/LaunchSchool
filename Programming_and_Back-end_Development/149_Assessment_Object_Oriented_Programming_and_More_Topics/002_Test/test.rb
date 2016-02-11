@@ -1,34 +1,13 @@
-class Calculator
-  def initialize
-    clear
-  end
+def measure_time_to_do_a_task
+  time_before = Time.now
+  yield
+  time_after = Time.now
   
-  def add(number2, number1 = @first_number)
-    @result = number1 + number2
-    @first_number = @result
-  end
-  
-  def substract(number2, number1 = @first_number)
-    @result = number1 - number2
-    @first_number = @result
-  end
-  
-  def multiply(number2, number1 = @first_number)
-    @result = number1 * number2
-    @first_number = @result
-  end
-  
-  def divide(number2, number1 = @first_number)
-    @result = number1 / number2
-    @first_number = @result
-  end
-  
-  def clear
-    @first_number = 0
-    @result = 0
-  end
-  
-  def result
-    @result
-  end
+  puts "It took #{time_after - time_before} seconds to run your block."
+end
+
+# Time to print my name char by char
+measure_time_to_do_a_task do
+  "Lucas".each_char { |char| print char }
+  puts ""
 end
