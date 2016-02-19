@@ -1,0 +1,48 @@
+Notes...
+
+Client will be a browser, frequently.
+Server can run multiple or different software, it depends on the server.
+
+Example:
+todos.com
+
+Request
+Method:     GET
+Path:       /tasks
+Parameter:  ?due=today
+
+The domain name is not there because it is used only to check at what server to send
+the request.
+
+After receiving the request, the server will perform some tasks, like...
+
+  - Verify user session
+  - Load tasks from database
+  - Render HTML
+  
+Then sends back the Response
+
+Response
+Status      200 OK
+Headers     ContentType: text/html
+Body        <html><body>
+
+Finally the browser will render the response for the user.
+
+Exercises:
+
+1. What are the required components of an HTTP request? What are the additional optional components?
+R:// Required: Method, Path. 
+      Additional optional: Parameter, Headers and Body.
+
+2. What are the required components of an HTTP response? What are the additional optional components?
+R:// Required: Status Code
+    Additional optional: Body, Headers
+    
+3. What determines whether a request should use GET or POST as its HTTP method?
+R:// GET requests should only retrieve content from the server.
+
+POST requests involve changing values that are stored on the server.
+
+4. Is the host component of a URL included as part of an HTTP response?
+R:// No.

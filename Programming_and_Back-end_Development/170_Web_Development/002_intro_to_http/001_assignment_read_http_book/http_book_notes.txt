@@ -1,0 +1,102 @@
+Background:
+
+- HTTP Protocol is stateless
+- URL - IP Adress (DomainNamingSystem) - Internet - Server
+- Resources (Videos, Images, etc)
+
+What is a URL?:
+
+- URL (Uniform Resource Locator)
+- URL components: from http://www.example.com/home/
+  - "http": this is the URL scheme
+  - "www.example.com": this is the resource path or host. It tells the client where the 
+    resource is hosted or located.
+  - "/home/": the third parth is the url path and it shows what local resource is being
+    requested.
+- Standard port used is port 80. Other ports can be specified in the URL.
+- Query Strings/Parameters:
+  - example of a query string:
+    http://www.example.com?search=ruby&results=10
+    ? - This is a reserved character that marks the start of the query string.
+    search = ruby - this is a parameter name/value pair.
+    & - This is a reserved character, used when adding more parameters to the query string.
+    results = 10 - This is also a parameter/value pair.
+  - Query strings are great to pass in additional information to the server, however, there are
+    some limits to the use of query strings:
+      - Have a maximum length.
+      - The name/value pairs used are visible in the URL. so cant be used for passing sensitive information
+      - Space and special characters like & cannot be used with query strings. They must be
+        URL encoded.
+- URL encoding:
+  - example of encoding:
+  
+    Character	ASCII code	URL
+    Space	    20	        http://www.thedesignshop.com/shops/tommy%20hilfiger.html
+    !	        21	        http://www.thedesignshop.com/moredesigns%21.html
+    +	        2B	        http://www.thedesignshop.com/shops/spencer%2B.html
+    #	        23	        http://www.thedesignshop.com/%23somequotes%23.html
+  - Characters ok to use: alphanumeric and special characters $-_.+!'(),",
+
+- HTTP Headers
+  - There are REQUEST headers and RESPONSE headers.
+  - Request Headers:
+  Field Name	        Description	                                  Example
+  Host	              The domain name of the server.	              Host: www.reddit.com
+  Accept-Language	    List of acceptable languages.	                Accept-Language: en-US,en;q=0.8
+  User-Agent	        A string that identifies the client.	        User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/38.0.2125.101 Safari/537.36
+  Connection        	Type of connection the client would prefer.	  Connection: keep-alive
+  
+- HTTP Responses
+  - Status Code. It is a three digit number that the server sends back after receiving a request
+    signifying the status of the request. Her some examples.
+    Status Code	  Status          Text	Meaning
+    200	          OK	            The request was handled successfully.
+    302	          Found	          The requested resource has changed temporarily. Usually results in a redirect to another URL.
+    404	          Not Found	      The requested resource cannot be found.
+    500	          Internal Server Error	The server has encounter a generic error.
+    
+  - 302 - Redirect
+    - Check at the header "Location", which have the URL where you will be redirected.
+  
+  - Response Headers
+    - These offer more information about the resource being sent back. Here some examples.
+    Header Name	          Description	                                      Example
+    Content-Encoding	    The type of encoding used on the data.	          Content-Encoding: gzip
+    Server	              Name of the server.	Server:thin 1.5.0 codename Knife
+    Location	            Notify client of new resource location.	Location: http://www.github.com/login
+    Content-Type	        The type of data the response contains.	Content-Type:text/html; charset=UTF-8
+    
+- Statefull Web Applications
+  - Sessions, a session has a unique token that gets passed back and forth and it is called the 
+    session identifier.
+  - A cookie is a piece of data that's sent from the server and stored in the
+    client during a request/response cycle.
+  - AJAX. Stands for Asynchronous JavaScript and XML. It's main feature is that it 
+    allows browsers to issue request and process responses without a full page refresh.
+    
+- Security
+  - Secure HTTP (HTTPS)
+    - HTTPS use TLS to encrypt the messages between the server and the client.
+  - Same-origin policy.
+    - CORS (cross-origin resource sharing)
+  - Session Hijacking
+    - In a session hijacking, the user won't even know an attacker is accessing his or her session
+      without ever even knowing the username or password.
+    - Countermeasures for session hijacking.
+      - One popular way of solving session hijacking is by resetting sessions. With authentication
+      systems, this means a successfull login must render an old session id invalid and create a 
+      new one. At this point the altered session id will change, and the attacker will not be able to 
+      have access.
+      - Set an expiration time in sessions.
+      - Use HTTPS across the entire app to minimize the chance that an attacker can get to the
+      session id.
+  - Cross-Site Scripting (XSS)
+    - This type of attack happens when you allow users to input HTML or JavaScript that ends up 
+    being displayed by the site directly.
+    - Potential solutions for XSS.
+      - One way to prevent this kind of attack is by making sure to always sinitize user input. Eliminate
+      problematic input, such as <script> tags, or disallowing HTML and JavaScript input altogether in
+      favor of a safer format.
+      - The second way is to escape all user input data when displaying it. If you do need to allow
+      users to input HTML and JavaScript, then when you print it out, make sure to escape it so the browser 
+      does not interpret it as code.
