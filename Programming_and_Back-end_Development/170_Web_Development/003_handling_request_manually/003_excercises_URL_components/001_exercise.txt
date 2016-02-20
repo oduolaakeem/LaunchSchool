@@ -1,0 +1,81 @@
+URL components exercises
+
+  1. Given the following URL:
+  
+  https://amazon.com/Double-Stainless-Commercial-Refrigerator/B60HON32?ie=UTF8&qid=142952676&sr=93&keywords=commercial+fridge
+  
+  a. Identify the host.
+  
+    amazon.com
+  
+  b. Identify the names of the query parameters
+  
+    ie, qid, sr, keywords
+  
+  c. Identify the values of the query parameters
+  
+    for ie, value is UTF8
+    for qid, value is 142952676
+    for sr, value is 93
+    for keywords, value is commercial+fridge
+  
+  d. Identify the protocol
+  
+    HTTPS (secure HTTP)
+    
+  e. Identify the path
+  
+    path = /Double-Stainless-Commercial-Refrigerator/B60HON32
+    
+  d. Identify the port
+  
+    When a port is not specified in the URL, the port will be 80.
+  
+2. Add the port 3000 to the folowing URL.
+
+  without port 3000
+  http://amazon.com/products/B60HON32?qid=142952676&sr=93
+  
+  with port 3000
+  http://amazon.com:3000/products/B60HON32?qid=142952676&sr=93
+  
+3. Given the following URL:
+
+  http://localhost:4567/todos/15
+  
+  a. Identify the query parameters.
+  
+    no query paramters
+  
+  b. Identify the protocol.
+  
+    http protocol
+    
+  c. Identify the path.
+  
+    /todos/15
+    
+  d. Identify the host.
+  
+    localhost
+    
+  e. Identify the port.
+  
+    The port is 4567
+    
+4. What are two different ways to encode a space in a query parameter?
+
+  first way to do it: %20
+  second way to do it: +
+  
+5. What character is used to indicate the beginning of a URL's query parameters?
+
+  The character used to indicate the beginning of a URL query is "?"
+  
+6. What character is used to between the name and value of a query parameter?
+
+  The character used between the name and value of a query parameter is the equal sign ("=")
+  
+7. What character is used between multiple query parameters?
+
+  You use "&" between multiple query parameters
