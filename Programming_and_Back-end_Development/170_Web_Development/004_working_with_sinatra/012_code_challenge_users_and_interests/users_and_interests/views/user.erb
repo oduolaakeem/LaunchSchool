@@ -1,0 +1,20 @@
+<h2><% params[:user] %></h2>
+
+<h3>email address: <%= @email %></h3>
+
+<h3>Interests:</h3>
+<ul>
+  <% @interests.each do |interest| %>
+   <%= interest %>,
+  <% end %>
+</ul>
+
+<section>
+  <h3>Check other users</h3>
+  
+  <% @users.each do |user| %>
+    <% unless @user == user %>
+      <a href="/users/<%= user %>"><%= user.capitalize %></a>
+    <% end %>
+  <% end %>
+</section>
