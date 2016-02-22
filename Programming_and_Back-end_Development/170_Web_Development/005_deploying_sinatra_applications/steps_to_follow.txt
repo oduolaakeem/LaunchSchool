@@ -1,0 +1,8 @@
+Steps to follow to deploy the app:
+
+1. initialize git
+2. execute command:
+    heroku git:remote -a <app name>
+3. execute command:
+    git push heroku master
+4. test app
