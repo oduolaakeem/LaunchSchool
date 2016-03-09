@@ -42,3 +42,19 @@ get '/:file' do
     redirect "/"
   end
 end
+
+get '/:file/edit' do
+  path = root + '/data/' + params[:file]
+  @content = load_file_content(path)
+  headers['Content-Type'] = 'text/html;charset=utf-8'
+  erb :file_edit, layout: :layout
+end
+
+post '/:file/edit' do
+  path = root + '/data/' + params[:file]
+  file = File.open(path, "w")
+  file.write(params[:file_content])
+  file.close
+  session[:success] = "#{params[:file]} was updated."
+  redirect '/'
+end

@@ -1,2 +1,3 @@
-It's very easy to make some words **bold** and other words *italic* with Markdown.
-You can even [link to Google!](http://google.com)
+# This is the title of the markdown formatted file.
+<p>It's very easy to make some words <strong>bold</strong> and other words <em>italic</em> with Markdown.
+You can even <a href="http://google.com">link to Google!</a></p>
