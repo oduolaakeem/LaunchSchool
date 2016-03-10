@@ -1,0 +1,13 @@
+body {
+  font-family: sans-serif;
+}
+
+.message {
+  width: 95%;
+  margin: 10px auto;
+  background-color: #eedd82;
+}
+
+.message p {
+  padding: 5px;
+}
