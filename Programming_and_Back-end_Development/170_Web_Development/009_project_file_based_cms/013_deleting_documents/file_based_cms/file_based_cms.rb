@@ -39,6 +39,10 @@ get '/' do
   erb :index, layout: :layout
 end
 
+get '/new' do
+  erb :new, layout: :layout
+end
+
 get '/:file' do
   path = File.join(data_path, params[:file])
   
@@ -64,4 +68,28 @@ post '/:file/edit' do
   file.close
   session[:success] = "#{params[:file]} was updated."
   redirect '/'
+end
+
+def valid_file_name?
+  path = File.join(data_path, params[:file_name])
+  File.extname(path) != "" && File.basename(path)[0] != "."
+end
+
+post '/create' do
+  if valid_file_name?
+    path = File.join(data_path, params[:file_name]) 
+    File.new(path, "w+")
+    session[:success] = "#{params[:file_name]} was created."
+    redirect '/'
+  else
+    session[:error] = "Please enter a valid name, and dont forget the extension."
+    erb :new, layout: :layout
+  end
+end
+
+post '/:file/delete' do
+  path = File.join(data_path, params[:file])
+  File.delete(path)
+  session[:success] = "The file #{params[:file]} has been deleted."
+  redirect "/"
 end

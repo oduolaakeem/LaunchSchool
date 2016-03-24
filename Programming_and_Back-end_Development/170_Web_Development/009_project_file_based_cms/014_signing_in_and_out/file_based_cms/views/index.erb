@@ -1,0 +1,28 @@
+<ul>
+  <% if @user %>
+    <% @files.each do |file| %>
+      <li>
+        <a class="file_name" href="/<%= file %>"><%= file %></a>
+        <a class="edit_link" href="/<%= file %>/edit">edit</a>
+        <form class="inline" action="/<%= file %>/delete" method="post">
+          <button type="submit" value="Delete">Delete</button>
+        </form>
+      </li>
+    <% end %>
+    <br>
+    <a href="/new">New Document</a>
+    <br>
+    <br>
+    <em>Signed in as <%= @user %>.</em>
+    <form class="inline" action="/users/signout" method="post">
+      <button type="submit" value="Sign Out">Sign Out</button>
+    </form>
+  <% else %>
+    <h2>Welcome</h2>
+    <p>You are not signed in. Please sign in to have access to all the contents.</p>
+    <form action="/users/signin" method="get">
+      <button type="submit" value="SignIn">SignIn</button>
+    </form>
+  <% end %>
+</ul>
+

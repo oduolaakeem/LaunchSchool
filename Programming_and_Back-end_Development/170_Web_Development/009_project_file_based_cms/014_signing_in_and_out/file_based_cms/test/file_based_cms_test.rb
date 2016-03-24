@@ -75,7 +75,7 @@ class CMSTest < Minitest::Test
     get '/'
     assert_equal 200, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
-    assert_includes last_response.body, "<a href=\"/changes.txt\">changes.txt</a> - <a href=\"/changes.txt/edit\">edit</a>"
+    assert_includes last_response.body, "<a class=\"file_name\" href=\"/changes.txt\">changes.txt</a>\n      <a class=\"edit_link\" href=\"/changes.txt/edit\">edit</a>"
     get '/changes.txt/edit'
     assert_equal 200, last_response.status
     assert_includes last_response.body, "<textarea"
@@ -109,4 +109,15 @@ class CMSTest < Minitest::Test
     assert_equal 200, last_response.status
     assert_includes last_response.body, "test.txt was created."
   end
+  
+  # def test_deleting_documents
+  #   create_document("delete_me.txt", "none")
+  #   post "/delete_me.txt/delete"
+  #   assert_equal 302, last_response.status
+  #   get last_response["Location"]
+  #   assert_equal 200, last_response.status
+  #   assert_includes last_response.body, "The file delete_me.txt has been deleted."
+  #   get "/"
+  #   refute_includes last_response.body, "delete_me.txt"
+  # end
 end

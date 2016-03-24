@@ -36,6 +36,8 @@ end
 get '/' do
   pattern = File.join(data_path, "*")
   @files = Dir.glob(pattern).map { |path| File.basename(path) }
+  session[:user] || session[:user] = nil
+  @user = session[:user]
   erb :index, layout: :layout
 end
 
@@ -85,4 +87,42 @@ post '/create' do
     session[:error] = "Please enter a valid name, and dont forget the extension."
     erb :new, layout: :layout
   end
+end
+
+post '/:file/delete' do
+  path = File.join(data_path, params[:file])
+  File.delete(path)
+  session[:success] = "The file #{params[:file]} has been deleted."
+  redirect "/"
+end
+
+get '/users/signin' do
+  erb :user_signin, layout: :layout
+end
+
+def valid_login?(username, password)
+  return false if username == ""
+  return false if password == ""
+  true
+end
+
+post '/users/signin' do
+  username = params[:username]
+  password = params[:password]
+  if valid_login?(username, password)
+    session[:user] = username
+    session[:password] = password
+    session[:success] = "Welcome!"
+    redirect '/'
+  else
+    session[:error] = "Please input the right username and password to login."
+    redirect '/users/signin'
+  end
+end
+
+post '/users/signout' do
+  session.delete(:user)
+  session.delete(:password)
+  session[:success] = "Successfully signed out."
+  redirect '/'
 end

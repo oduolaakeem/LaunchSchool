@@ -11,3 +11,16 @@ body {
 .message p {
   padding: 5px;
 }
+
+.inline {
+  display: inline;
+}
+
+li {
+  margin-bottom: 5px;
+}
+
+.file_name {
+  display: inline-block;
+  width: 200px;
+}
