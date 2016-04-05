@@ -35,6 +35,10 @@ class CMSTest < Minitest::Test
     last_request.env["rack.session"]
   end
   
+  def admin_session
+    { "rack.session" => { user: "admin" } }
+  end
+  
   def test_index
     create_document("about.md")
     create_document("about.txt")
@@ -80,7 +84,7 @@ class CMSTest < Minitest::Test
     assert_equal 200, last_response.status
     assert_equal "text/html;charset=utf-8", last_response["Content-Type"]
     assert_includes last_response.body, "<a class=\"file_name\" href=\"/changes.txt\">changes.txt</a>\n      <a class=\"edit_link\" href=\"/changes.txt/edit\">edit</a>"
-    get '/changes.txt/edit'
+    get '/changes.txt/edit', {}, admin_session
     assert_equal 200, last_response.status
     assert_includes last_response.body, "<textarea"
     assert_includes last_response.body, "<input type=\"submit\""
@@ -88,7 +92,7 @@ class CMSTest < Minitest::Test
   
   def test_updating_document
     create_document("changes.txt")
-    post '/changes.txt/edit', file_content: "new content"
+    post '/changes.txt/edit', {file_content: "new content"}, admin_session
     assert_equal 302, last_response.status
     assert_equal "changes.txt was updated.", session[:success]
     get last_response["Location"]
@@ -98,16 +102,16 @@ class CMSTest < Minitest::Test
   end
   
   def test_creating_document
-    get '/new'
+    get '/new', {}, admin_session
     assert_equal 200, last_response.status
     assert_includes last_response.body, "Add a new document:"
-    post '/create', file_name: ""
+    post '/create', {file_name: ""}, admin_session
     assert_equal 200, last_response.status
     assert_includes last_response.body, "Please enter a valid name, and dont forget the extension."
-    post '/create', file_name: "name"
+    post '/create', {file_name: "name"}, admin_session
     assert_equal 200, last_response.status
     assert_includes last_response.body, "Please enter a valid name, and dont forget the extension."
-    post '/create', file_name: "test.txt"
+    post '/create', {file_name: "test.txt"}, admin_session
     assert_equal 302, last_response.status
     assert_equal "test.txt was created.", session[:success]
     get last_response["Location"]
@@ -116,7 +120,7 @@ class CMSTest < Minitest::Test
   
   def test_deleting_documents
     create_document("delete_me.txt", "none")
-    post "/delete_me.txt/delete"
+    post "/delete_me.txt/delete", {}, admin_session
     assert_equal 302, last_response.status
     assert_equal "The file delete_me.txt has been deleted.", session[:success]
     get last_response["Location"]
