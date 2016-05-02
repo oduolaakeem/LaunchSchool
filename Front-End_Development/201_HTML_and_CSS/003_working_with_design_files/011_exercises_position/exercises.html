@@ -1,0 +1,50 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Exercises</title>
+    <meta charset="UTF-8" />
+    <style>
+      #div_corner {
+        position: absolute;
+        width: 400px;
+        top: 20px;
+        left: 50%;
+        padding: 30px 15px;
+        margin-left: -200px;
+        background: #fffacd;
+        box-sizing: border-box;
+        z-index: 2;
+      }
+      #div_cover {
+        position: fixed;
+        top: 0;
+        right: 0;
+        width: 100vw;
+        height: 100vh;
+        z-index: 1;
+        background: rgba(0, 0, 0, 0.6);
+      }
+      #div_inside_corner {
+        position: absolute;
+        top: -10px;
+        left: -10px;
+        width: 20px;
+        height: 20px;
+        background: #fcfc99;
+      }
+    </style>
+  </head>
+  <body>
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam consequat, augue in posuere lacinia, leo leo consequat lorem, eu faucibus mi tellus non velit. Quisque congue suscipit iaculis. Donec dignissim neque nulla, quis ultrices dui sollicitudin ut. Nunc ut volutpat ex, at efficitur magna. Vestibulum tempus libero eget nibh mollis lobortis. In hac habitasse platea dictumst. Vivamus vel erat convallis, pretium urna quis, ornare massa. Aliquam lacinia nisl dui, a rhoncus justo blandit et. Nullam blandit finibus tellus eu tristique. Morbi posuere eros eu eros faucibus interdum a ullamcorper nibh. Pellentesque euismod egestas ipsum id ornare. Mauris sit amet velit lectus.</p>
+    <p>Aliquam sit amet ex dignissim, tempor nunc placerat, mattis justo. Proin vitae lectus id nisl aliquet lacinia. Ut iaculis convallis mollis. Aliquam velit mi, pretium vitae sodales vel, pellentesque id nisi. Suspendisse potenti. Nullam ac pretium justo, et mollis ipsum. Fusce eget mi lacinia, accumsan tellus eget, porta lorem. Cras porta tempus lorem in efficitur. Vivamus lacus dolor, auctor ac finibus quis, malesuada ut lectus. Aenean tempus ante nec ligula elementum, vel posuere ipsum aliquet. Morbi fermentum at nibh a vulputate. Mauris nec fermentum velit, ut imperdiet eros. Donec hendrerit risus quis semper congue. Curabitur eu venenatis odio. Nullam sit amet rutrum dui. Nunc vitae accumsan dui.</p>
+    <p>Nunc neque justo, dapibus vel venenatis ut, fringilla sit amet arcu. Pellentesque vestibulum tellus eget rhoncus efficitur. Pellentesque scelerisque fringilla arcu sit amet dignissim. Pellentesque porttitor purus quis mi convallis, vel lobortis leo interdum. Vivamus odio leo, venenatis consequat sem vel, accumsan viverra urna. Curabitur erat orci, euismod ut erat sit amet, porttitor ultrices turpis. Integer lacinia metus a leo imperdiet facilisis. Fusce ut diam quis justo accumsan efficitur. Vestibulum mattis nibh at diam molestie, at consequat massa finibus. Cras arcu dolor, rutrum ac nibh pellentesque, laoreet iaculis tellus. Sed quis blandit lorem, a aliquet leo. Vivamus rutrum interdum ipsum.</p>
+    <p>Sed lobortis lectus a lobortis commodo. Proin elit est, pulvinar sed nulla non, vestibulum sagittis turpis. Praesent pellentesque neque eu viverra vehicula. Vivamus vel condimentum dui, sed interdum urna. Nunc volutpat luctus tortor, eu tempor leo laoreet sed. Nam pretium ligula ac ipsum molestie imperdiet. Nunc nec sodales nisi. Nam erat justo, ultricies eu risus eget, elementum tristique ligula. Aenean pharetra, ex ut posuere tristique, odio ligula facilisis lectus, sed tempor urna enim at eros. Morbi libero nisl, euismod in pulvinar a, bibendum eu neque. Nunc tellus augue, auctor et dui sollicitudin, pulvinar eleifend sem. Donec pharetra, odio bibendum ultricies tempus, velit ligula bibendum nibh, id pharetra elit risus in tortor. Nunc posuere viverra neque, ut molestie ipsum bibendum sed.</p>
+    <div id="div_cover">
+      
+    </div>
+    <div id="div_corner">
+      I'm positioned
+      <div id="div_inside_corner"></div>
+    </div>
+  </body>
+</html>
