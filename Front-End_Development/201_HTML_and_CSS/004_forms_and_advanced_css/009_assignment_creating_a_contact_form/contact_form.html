@@ -1,0 +1,121 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Contact Form</title>
+    <meta charset="UTF-8" />
+    <style>
+      
+    </style>
+  </head>
+  <body>
+    <h2>Welcome! Sign up with us!</h2>
+    <form action="" method="post">
+      <fieldset>
+        <dl>
+          <dt><label for="first_name">First Name</label></dt>
+          <dd><input type="text" name="first_name" id="first_name"></dd>
+          
+          <dt><label for="last_name">Last Name</label></dt>
+          <dd><input type="text" name="last_name" id="last_name"></dd>
+          
+          <dt><label for="email">Email</label></dt>
+          <dd><input type="email" name="email" id="email" inputmode="email" placeholder="abc@email.com"></dd>
+          
+          <dt><label for="city">City</label></dt>
+          <dd><input type="text" name="city" id="city"></dd>
+          
+          <dt><label for="state">State</label></dt>
+          <dd>
+            <select id="state" name="state">
+              <option>AK</option>
+              <option>AL</option>
+              <option>AR</option>
+              <option>AZ</option>
+              <option>CA</option>
+              <option>CO</option>
+              <option>CT</option>
+              <option>DC</option>
+              <option>DE</option>
+              <option>FL</option>
+              <option>GA</option>
+              <option>HI</option>
+              <option>IA</option>
+              <option>ID</option>
+              <option>IL</option>
+              <option>IN</option>
+              <option>KS</option>
+              <option>KY</option>
+              <option>LA</option>
+              <option>MA</option>
+              <option>MD</option>
+              <option>ME</option>
+              <option>MI</option>
+              <option>MN</option>
+              <option>MO</option>
+              <option>MS</option>
+              <option>MT</option>
+              <option>NC</option>
+              <option>ND</option>
+              <option>NE</option>
+              <option>NH</option>
+              <option>NJ</option>
+              <option>NM</option>
+              <option>NV</option>
+              <option>NY</option>
+              <option>OH</option>
+              <option>OK</option>
+              <option>OR</option>
+              <option>PA</option>
+              <option>RI</option>
+              <option>SC</option>
+              <option>SD</option>
+              <option>TN</option>
+              <option>TX</option>
+              <option>UT</option>
+              <option>VA</option>
+              <option>VT</option>
+              <option>WA</option>
+              <option>WI</option>
+              <option>WV</option>
+              <option>WY</option>
+            </select>
+          </dd>
+          
+          <dt><label for="zipcode">Zip Code</label></dt>
+          <dd><input type="text" name="zipcode" id="zipcode" maxlength="5"></dd>
+          
+          <dt><label>Which of these colors do you most prefer?</label></dt>
+          <dd>
+            <ul>
+              <li><label><input type="radio" name="favourite_color" value="red" checked>Red</label></li>
+              <li><label><input type="radio" name="favourite_color" value="green">Green</label></li>
+              <li><label><input type="radio" name="favourite_color" value="blue">Blue</label></li>
+              <li><label><input type="radio" name="favourite_color" value="violet">Violet</label></li>
+              <li><label><input type="radio" name="favourite_color" value="black">Black</label></li>
+            </ul>
+          </dd>
+          
+          <dt><label>What web technologies do you want to hear more about?</label></dt>
+          <dd>
+            <ul>
+              <li><label><input type="checkbox" name="html">HTML</label></li>
+              <li><label><input type="checkbox" name="css">CSS</label></li>
+              <li><label><input type="checkbox" name="javascript">Javascript</label></li>
+              <li><label><input type="checkbox" name="ruby">Ruby</label></li>
+              <li><label><input type="checkbox" name="rails">Rails</label></li>
+            </ul>
+          </dd>
+          
+          <dt><label>Send us addittional comments:</label></dt>
+          <dd><textarea name="comments" rows="5" cols="45" placeholder="Write something here..."></textarea></dd>
+        </dl>
+        <input type="date" name="timestamp" value="2016-05-02" hidden>
+        
+        <br>
+        
+        <input type="submit" value="Submit">
+        <input type="reset" value="Clear">
+      </fieldset>
+    </form>
+  </body>
+</html>
