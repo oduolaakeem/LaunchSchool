@@ -1,0 +1,167 @@
+/* http://meyerweb.com/eric/tools/css/reset/ 
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+ HTML5 display-role reset for older browsers 
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	line-height: 1;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+/*****************************************/
+/*CSS*/
+/*****************************************/
+
+html {
+  font-size: 16px;
+  font-family: Helvetica, Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: #ffd505;
+  padding-top: 0;
+  margin-top: 0;
+}
+
+div.column {
+  width: 900px;
+  margin: 0 auto;
+}
+
+header {
+  background: #057ec1;
+  border-radius: 0 0px 15px 15px;
+}
+
+header h1 {
+  padding: 37px 0 37px 28px;
+  font-size: 36px;
+  font-weight: bold;
+  color: #fff;
+}
+
+main {
+  background: #ececec;
+  padding: 32px 28px 40px 28px;
+  margin-top: 32px;
+}
+
+main:after {
+  display: block;
+  clear: both;
+  content: "";
+}
+
+main h2 {
+  font-size: 32px;
+  font-weight: bold;
+}
+
+main ul {
+  padding: 32px 0 0 0;
+}
+
+main li {
+  float: left;
+  width: 23.5%;
+  padding: 15px;
+  margin: 0 0 2% 2%;
+  background: #fff;
+  box-sizing: border-box;
+}
+
+main li:nth-of-type(4n+1) {
+  margin-left: 0;
+}
+
+main input[type="checkbox"] {
+  display: none;
+}
+
+main figure {
+  width: 100%;
+  height: 160px;
+}
+
+main img {
+  display: block;
+  width: auto;
+  height: 140px;
+  margin: 0 auto;  
+}
+
+h3 {
+  font-weight: bold;
+  font-size: 20px;
+}
+
+main li p {
+  padding-top: 5px;
+}
+
+main label {
+  cursor: pointer;
+}
+
+input:checked + figure img {
+  position: absolute;
+  top: 100px;
+  left: 50%;
+  z-index: 2;
+  width: 400px;
+  height: auto;
+  margin: 0 0 0 -200px;
+}
+
+input:checked + figure:before {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  z-index: 1;
+  content: "";
+  background: rgba(0, 0, 0, 0.4);
+}
+
