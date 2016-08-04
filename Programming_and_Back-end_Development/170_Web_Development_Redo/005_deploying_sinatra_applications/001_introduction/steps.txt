@@ -1,0 +1,61 @@
+To deploy an app to heroku.
+
+1. Create a git repository for the project.
+
+git init
+git add -A
+git commit -m "Initial commit"
+
+2. Configuring an application for deployment
+
+  2.1. Prevent the application from reloading in production.
+  
+    add condition to the sinatra/reloader
+    
+    require "sinatra/reloader" if development?
+
+  2.2. Specify a ruby version in Gemfile
+  
+    check the version and specify it in the gemfile
+  
+    ruby "2.2.1"
+  
+  2.3. Configure your application to use a production web server.
+  
+    puma is a recommended server.
+    
+    add to the gemfile the following:
+    
+    group :production do
+      gem "puma"
+    end
+    
+  2.4. Create a config.ru file in the root of the project that tells the web server, how to start the application.
+  
+    require "./book_viewer"
+    run Sinatra::Application
+    
+  2.5. Create a file called Procfile in the root of the project with the following contents:
+  
+    web: bundle exec puma -t 5:5 -p ${PORT:-3000} -e${RACK_ENV:-development}
+    
+  2.6. Test your Procfile locally
+  
+    use "heroku local" command to boot the project locally and test it out.
+    
+3. Creating a heroku application
+
+  Now that the application is running locally using the production configuration, it is time to deploy it to a 
+  remote server.
+  
+  3.1. Create a Heroku application using "heroku apps:create $NAME", where $NAME is the application name you
+  wish to use. If you don't provide this value, Heroky will generate a random application name for you.
+  
+  3.2. Push the project to the new Heroku application using "git push heroku master".
+  
+  3.3 Visit your application and verify that everything is working.
+  
+  3.4 Recall that we are expecting Heroku automatically set the RACK_ENV environment variable to "production". To see
+  how this works, run "heroku config" in the book_viewer's directory after deploying to Heroku
+  
+    heroku config
