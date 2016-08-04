@@ -1,0 +1,173 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Todo Lists</title>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="styles.css" type="text/css" />
+  </head>
+  <body>
+    <input id="hamburger_check" type="checkbox" />
+    <label id="hamburger" for="hamburger_check"></label> 
+    <section>
+      <div class="nav">
+        <h2 id="all_todos">
+          <p>All Todos</p>
+          <p class="counter double_digit">18</p>
+        </h2>
+        <ul>
+          <li class="selected">
+            <p>02/16</p>
+            <p class="counter selected">8</p>
+          </li>
+          
+          <li>
+            <p>03/16</p>
+            <p class="counter">2</p>
+          </li>
+          
+          <li>
+            <p>04/16</p>
+            <p class="counter">1</p>
+          </li>
+          
+          <li>
+            <p>05/16</p>
+            <p class="counter">1</p>
+          </li>
+          
+          <li>
+            <p>06/16</p>
+            <p class="counter">6</p>
+          </li>
+        </ul>
+      </div>
+      
+      <div class="nav">
+        <h2 id="completed_todos">
+          <p>Completed</p>
+        </h2>
+        <ul>
+          <li>
+            <p class="completed">02/15</p>
+          </li>
+          
+          <li>
+            <p class="completed">03/15</p>
+          </li>
+          
+          <li>
+            <p class="completed">04/15</p>
+          </li>
+          
+          <li>
+            <p class="completed">05/15</p>
+          </li>
+          
+          <li>
+            <p class="completed">06/14</p>
+          </li>
+        </ul>
+      </div>
+    </section>
+    <main>
+      <header>
+        <h2>
+          <p>02/16</p>
+          <p class="counter selected">8</p>
+        </h2>
+      </header>
+      <a href="#">Add a new to do</a>
+      <ul>
+        <li>
+          <label>
+            <input id="item_1" type="checkbox" />
+            <div>
+              <div class="modal">
+                <form>
+                  <label for="title">Title</label>
+                  <input type="text" id="title" />
+                  
+                  <label for="due_date_year">Due Date</label>
+                  <input type="number" id="due_date_year" placeholder="year" /><em>/</em>
+                  <input type="number" id="due_date_month" placeholder="month" /><em>/</em>
+                  <input type="number" id="due_date_day" placeholder="day" />
+                  
+                  <label for="description">Description</label>
+                  <textarea id="description" name="description" rows="5" cols="40"></textarea> 
+                  <input id="save" class="popup_button" type="button" value="Save">
+                  <input class="popup_button" type="button" value="Mark As Complete">
+                </form>
+              </div>
+            </div>
+            <a>Item 1</a>
+          </label>
+          <a href="#" class="delete_btn">delete</a>
+        </li>
+        
+        <li>
+          <label>
+            <input type="checkbox" value="Item 2" />
+            <a>Item 2</a>
+          </label>
+          <a href="#" class="delete_btn">delete</a>
+        </li>
+        
+        <li class="done">
+          <label>
+            <input type="checkbox" value="Item 3" />
+            <a>Item 3</a>
+          </label>
+          <a href="#" class="delete_btn">delete</a>
+        </li>
+        
+        <li class="done">
+          <label>
+            <input type="checkbox" value="Item 4" />
+            <a>Item 4</a>
+          </label>
+          <a href="#" class="delete_btn">delete</a>
+        </li>
+        
+        <li class="done">
+          <label>
+            <input type="checkbox" value="Item 5" />
+            <a>Item 5</a>
+          </label>
+          <a href="#" class="delete_btn">delete</a>
+        </li>
+        
+        <li>
+          <label>
+            <input type="checkbox" value="Item 6" />
+            <a>Item 6</a>
+          </label>
+          <a href="#" class="delete_btn">delete</a>
+        </li>
+        
+        <li>
+          <label>
+            <input type="checkbox" value="Item 7" />
+            <a>Item 7</a>
+          </label>
+          <a href="#" class="delete_btn">delete</a>
+        </li>
+        
+        <li>
+          <label>
+            <input type="checkbox" value="Item 8" />
+            <a>Item 8</a>
+          </label>
+          <a href="#" class="delete_btn">delete</a>
+        </li>
+        
+        <li>
+          <label>
+            <input type="checkbox" value="Item 9" />
+            <a>Item 9</a>
+          </label>
+          <a href="#" class="delete_btn">delete</a>
+        </li>
+      </ul>
+    </main>
+  </body>
+</html>

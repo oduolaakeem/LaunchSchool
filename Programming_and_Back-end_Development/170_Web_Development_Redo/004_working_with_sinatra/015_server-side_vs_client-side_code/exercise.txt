@@ -1,0 +1,21 @@
+For each of the following filetypes, indicate whether that filetype is considered server-side or client-side and why
+
+1. Gemfile
+Server-side
+Because it contains all the ruby gems needed to run the application in the server.
+
+2. Ruby files (.rb)
+Server-side
+Because it is the application file itself that need to be run by the server in order for the application to work
+
+3. Stylesheets (.css)
+Client-side
+Because it is the styling of the html pages, it is ran by the web browser.
+
+4. JavaScript Files (.js)
+Client-side
+It is run by the web browser.
+
+5. View Templates (.erb)
+Server-side
+Because it has embedded ruby code so it need to be run by the server.

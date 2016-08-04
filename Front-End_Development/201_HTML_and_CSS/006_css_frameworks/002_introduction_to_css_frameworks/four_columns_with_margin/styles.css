@@ -1,0 +1,27 @@
+ul {
+  list-style: none;
+}
+/*.fourth {*/
+/*  display: inline-block;*/
+/*  width: 25%;*/
+/*  vertical-align: top;*/
+/*}*/
+
+.row {
+  clear: both;
+  margin-left: -2%;
+}
+
+.row:after {
+  display: block;
+  clear: both;
+  line-height: 0;
+  content: "";
+}
+
+.fourth {
+  float: left;
+  width: 23%;
+  margin-left: 2%;
+  background: #ccc;
+}
