@@ -1,0 +1,18 @@
+<% if session[:message] %>
+  <p style="background: yellow"><%= session.delete(:message) %></p>
+<% end %>
+
+<p>Remaining Money: $<%= session[:money] %></p>
+
+<form method="post" action="/make_bet">
+  <p>
+    <label>Bet:
+      <input name="bet" type="text" />
+    </label>
+  </p>
+  <p>
+    <button name="guess" value="1">Guess 1</button>
+    <button name="guess" value="2">Guess 2</button>
+    <button name="guess" value="3">Guess 3</button>
+  </p>
+</form>
