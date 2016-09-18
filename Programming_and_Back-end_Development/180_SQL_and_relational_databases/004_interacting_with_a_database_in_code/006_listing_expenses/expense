@@ -1,0 +1,22 @@
+#! /usr/bin/env ruby
+
+require "pg"
+
+db = PG.connect(dbname: "expense")
+
+result = db.exec("SELECT * FROM expense ORDER BY created_on ASC")
+
+headers = result.fields
+headers[0] = headers[0].rjust(3)
+headers[1] = headers[1].rjust(15)
+headers[2] = headers[2].rjust(12)
+
+puts headers.join(" | ")
+
+result.each do |tuple|
+  column = [ tuple["id"].rjust(3),
+             tuple["created_on"].rjust(15),
+             tuple["amount"].rjust(12),
+             tuple["memo"]]
+  puts column.join(" | ")
+end

@@ -1,0 +1,5 @@
+Cloud environment setup
+
+If using cloud9:
+
+sudo service postgresql start

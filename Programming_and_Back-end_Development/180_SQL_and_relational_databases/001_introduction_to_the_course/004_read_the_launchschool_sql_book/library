@@ -1,0 +1,340 @@
+\h
+SELECT VERSION()
+SELECT VERSION();
+SELECT VERSION()
+SELECT VERSION();
+VERSION();
+\h
+select version();
+DROP DATABASE
+drop database();
+DROP DATABASE;
+DROP DATABASE();
+\h
+\h
+\h DROP DATABASE
+DROP DATABASE sql_book
+drop database sql_book;
+DROP DATABASE sql_book;
+q
+\q
+\c
+\copyright
+\l
+\q
+\l
+\c
+\c library
+\dt
+\q
+\l
+\dt
+\h
+CREATE DATABASE library
+\L
+\l
+CREATE DATABASE library;
+\h CREATE DATABASE
+\q
+\L
+\l
+CREATE TABLE users (
+id serial,
+username CHAR(25) NOT NULL,
+enabled boolean DEFAULT TRUE,
+PRIMARY KEY (id)
+);
+\dt
+\d
+\d users
+\q
+\dt
+\l
+\d users
+INSERT INTO users (id, username, enabled)
+VALUES (20, 'John Smith', false);
+\h
+\c users
+q
+\q
+\l
+\d users
+\dt
+INSERT INTO users (id, username, enabled)
+VALUES (20, 'John Smith', false);
+INSERT INTO users (username)
+VALUES ('John Smith')
+;
+\d users
+INSERT INTO users (username, enabled)
+VALUES ('Harry Potter', false);
+INSERT INTO users (enabled)
+VALUES (false);
+SELECT *
+FROM users
+;
+SELECT username AS 'Users' FROM users;
+SELECT username AS "Users" FROM users;
+SELECT username AS "Madafakas" FROM users;
+SELECT username, id FROM users;
+SELECT id, username FROM users;
+SELECT username FROM users WHERE enabled = true;
+SELECT username, id FROM users ORDER BY username;
+SELECT username, id FROM users ORDER BY username DESC;
+SELECT username, id FROM users ORDER BY id DESC;
+SELECT username, id FROM users ORDER BY id ASC;
+\q
+SELECT *
+;
+SELECT *
+FROM users;
+UPDATE users SET enabled = true
+WHERE username = 'John Smith II';
+SELECT * FROM users
+;
+UPDATE users SET enabled = false;
+SELECT * FROM users
+;
+UPDATE users SET enabled = true
+WHERE rtrim(username) LIKE '% II';
+SELECT * FROM users
+;
+DELETE FROM users WHERE username = 'John Smith';
+SELECT * FROM users
+;
+ALTER TABLE users ADD COLUMN last_login timestamp NOT NULL DEFAULT NOW();
+SELECT * FROM users
+;
+\l
+\d users
+ALTER TABLE users RENAME COLUMN username TO full_name;
+\d users
+SELECT * FROM users
+;
+ALTER TABLE users ALTER COLUMN full_name TYPE VARCHAR(25)
+\d users
+;
+\d users
+ALTER TABLE users ALTER COLUMN full_name TYPE VARCHAR(5);
+\d users
+ALTER TABLE users DROP COLUMN enabled;
+\d users
+SELECT * FROM users
+;
+ALTER TABLE users RENAME TO all_users
+;
+\d users
+\d all_users
+DROP TABLE all_users;
+\l
+\d all_users
+CREATE TABLE users (id, name, enabled),
+\q
+]l
+\l
+;
+\dt
+SELECT * from users
+;
+ALTER TABLE
+users
+ADD COLUMN book_title VARCHAR(25)
+ADD COLUMN review_content VARCHAR(25)
+ADD COLUMN rating int,
+ADD COLUMN address VARCHAR(25);
+ALTER TABLE
+users
+ADD COLUMN book_title VARCHAR(25),
+ADD COLUMN review_content VARCHAR(25),
+ADD COLUMN rating int,
+ADD COLUMN address VARCHAR(25);
+\dt
+\d users
+INSERT into users (username, enabled, book_title, review_content, rating, address)
+VALUES('John Smith', false, 'Chaos', 'What is the butterfly effect?', 5, '2 Market Street');
+\h
+ALTER TABLE users ALTER COLUMN review_content VARCHAR(50);
+ALTER TABLE users ALTER COLUMN review_content TYPE VARCHAR(50);
+\d users
+ALTER TABLE users ALTER COLUMN address TYPE VARCHAR(255);
+\d users
+INSERT into users (username, enabled, book_title, review_content, rating, address)
+VALUES('John Smith', false, 'Chaos', 'What is the butterfly effect?', 5, '2 Market Street');
+INSERT into users (usernam, enabled, book_title, review_content, rating, address)
+VALUES('Jane Smith', true, 'Simple Taoism', 'About Living in balance',5, '3 Market Street'); 
+INSERT into users (username, enabled, book_title, review_content, rating, address)
+VALUES('Jane Smith', true, 'Simple Taoism', 'About Living in balance',5, '3 Market Street'); 
+SELECT * from users
+;
+INSERT into users (username, enabled, book_title, review_content, rating, address)
+VALUES('Jane Smith', true, 'The Storyteller', 'Memories of WWII', 4, '3 Market Street');
+SELECT * from users
+;
+DROP TABLE users
+SELECT * FROM users
+;
+\d users
+DROP TABLE users
+;
+select * from users
+;
+CREATE TABLE users (
+id serial,
+username VARCHAR(25) NOT NULL,
+enabled boolean DEFAULT true,
+last_login timestamp NOT NULL DEFAULT NOW(),
+PRIMARY KEY (id))
+;
+\d users
+CREATE TABLE addresses (
+user_id int NOT NULL,
+street VARCHAR(30) NOT NULL,
+city VARCHAR(30) NOT NULL, 
+state VARCHAR(30) NOT NULL,
+PRIMARY KEY (id),
+CONSTRAINT fk_user_id FOREIGN KEY (user_id) REFERENCES users (id)
+);
+CREATE TABLE addresses (
+user_id int NOT NULL,
+street VARCHAR(30) NOT NULL,
+city VARCHAR(30) NOT NULL, 
+state VARCHAR(30) NOT NULL,
+PRIMARY KEY (user_id),
+CONSTRAINT fk_user_id FOREIGN KEY (user_id) REFERENCES users (id)
+);
+\d addresses
+CREATE TABLE books (
+id serial,
+title VARCHAR(100) NOT NULL,
+author VARCHAR(100) NOT NULL, 
+published_date timestamp NOT NULL,
+isbn int,
+PRIMARY KEY (id),
+UNIQUE (isbn)
+);
+\d books
+SELECT * FROM books
+;
+DROP TABLE IF EXISTS reviews;
+CREATE TABLE reviews (
+id serial,
+book_id int NOT NULL,
+user_id int NOT NULL, 
+review_content VARCHAR(255),
+rating int,
+published_date timestamp DEFAULT CURRENT_TIMESTAMP,
+PRIMARY KEY (id),
+FOREIGN KEY (book_id) REFERENCES books(id) ON DELETE CASCADE,
+FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+\d reviews
+CREATE TABLE users_books (
+user_id int NOT NULL,
+book_id int NOT NULL, 
+checkout_date timestamp,
+return_date timestamp,
+PRIMARY KEY (user_id, book_id),
+FOREIGN KEY (user_id) REFERENCES users(id) ON UPDATE CASCADE,
+FOREIGN KEY (book_id) REFERENCES books(id) ON UPDATE CASCADE
+);
+\l
+\dt
+\d users
+\d addresses
+\h
+\? INSERT
+\h INSERT
+INSERT INTO users (username) VALUES ('lucasou89');
+SELECT * from users
+;
+SELECT * from addresses;
+\d addresses
+INSERT INTO addresses (street, city, state) VALUES ('19255 NE 10TH AVE', 'Miami', 'FL');
+INSERT INTO addresses (street, city, state) VALUES (2,'19255 NE 10TH AVE', 'Miami', 'FL');
+INSERT INTO addresses (user_id, street, city, state) VALUES (2,'19255 NE 10TH AVE', 'Miami', 'FL');
+INSERT INTO addresses (user_id, street, city, state) VALUES (1,'19255 NE 10TH AVE', 'Miami', 'FL');
+select * from addresses
+;
+INSERT INTO addresses (user_id, street, city, state) VALUES (1,'19255 NE 10TH AVE 2', 'Miami', 'FL');
+DELETE * from addresses
+SELECT * from addresses;
+delete * from addresses;
+select * from addresses;
+DELETE from addresses
+;
+select * from addresses
+;
+DELETE from users;
+\d reviews
+SELECT reviews.*, users.* FROM reviews LEFT JOIN users ON (users.id = reviews.user_id);
+\q
+\l
+\dt
+SELECT * from addresses
+;
+\q
+\q
+\dt
+\q
+\dt
+SELECT * FROM users;
+COPY
+(SELECT u.username, b.title
+FROM users u
+INNER JOIN users_books ub ON (ub.user_id = u.id)
+INNER JOIN books b ON (b.id = ub.book_id))
+TO '/tmp/users_books.csv'
+WITH CSV;
+\q
+\dt
+\copy books (title, author, published_date) FROM './gutenberg_books.csv' DELIMITER ',' CSV;
+\copy books (title, author, published_date) FROM 'gutenberg_books.csv' DELIMITER ',' CSV;
+SELECT * FROM books;
+\copy books (title, author, published_date) FROM 'gutenberg_books.csv' DELIMITER ',' CSV;
+\copy books (title, author, published_date) FROM '/gutenberg_books.csv' DELIMITER ',' CSV;
+\copy books (title, author, published_date) FROM './gutenberg_books.csv' DELIMITER ',' CSV;
+\copy books (title, author, published_date) FROM '../gutenberg_books.csv' DELIMITER ',' CSV;
+\!pwd
+\cd
+;
+\c
+\cd
+\d
+\! pwd
+\copy books (title, author, published_date) FROM './workspace/gutenberg_books.csv' DELIMITER ',' CSV;
+SELECT * FROM books;
+SELECT * FROM books;
+\q
+select * users;
+select * from users;
+INSERT INTO users (username, enabled, last_login) VALUES ('John Smith', false, NOW());
+select * from users;
+SELECT * from users;
+SELECT DISTINCT * from users;
+SELECT DISTINCT username AS user  from users;
+\q
+\dt;
+select * from transactions;
+\d transactions
+select * from transactions LIMIT 1;
+SELECT COUNT(id) FROM transactions;
+SELECT COUNT(DISTINCT description) FROM transactions;
+select * from transaction;
+select * from transactions;
+SELECT SUM(paid_out) AS paid_out_total, description FROM transactions GROUP BY description;
+SELECT SUM(paid_out) AS paid_out_total FROM transactions;
+SELECT SUM(paid_out), TO_CHAR(date, 'Month') FROM transactions GROUP BY TO_CHAR(date, 'Month');
+SELECT NOW();
+SELECT TO_CHAR(NOW());
+SELECT TO_CHAR(NOW(), 'Month');
+SELECT TO_CHAR(NOW(), 'MONTH');
+SELECT sum(paid_out), EXTRACT(MONTH FROM date) FROM transaction GROUP BY EXTRACT(MONTH FROM date);
+SELECT sum(paid_out), EXTRACT(MONTH FROM date) FROM transactions GROUP BY EXTRACT(MONTH FROM date);
+SELECT SUM(paid_out), description FROM transactions WHERE description = 'Online Shopping';
+SELECT SUM(paid_out), description FROM transactions WHERE description = 'Online Shopping' GROUP BY description;
+select * FROM transactions limit 1
+;
+SELECT AVG(paid_out), description FROM transactions WHERE description = 'Online Shopping' GROUP BY description;
+SELECT MAX(paid_out) FROM transactions;
+SELECT MIN(paid_out) FROM transactions;
+\s library

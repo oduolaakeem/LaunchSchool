@@ -1,0 +1,113 @@
+#! /usr/bin/env ruby
+
+require "pg"
+
+class CLI
+  def initialize
+    @expense_data = ExpenseData.new()
+  end
+  
+  def run(commands_list)
+    command = commands_list[0]
+
+    case command
+    when "list"
+      @expense_data.list_expenses
+    when "add"
+      amount = commands_list[1]
+      memo = commands_list[2]
+      date = commands_list[3]
+      if amount && memo && amount.to_f != 0.0
+        @expense_data.add_expense(amount, memo, date)
+      else
+        puts "You must provide an amount and memo."
+      end
+    when "search"
+      query = commands_list[1]
+      @expense_data.search_expense(query)
+    when "delete"
+      id = commands_list[1]
+      if id
+        @expense_data.delete_expense(id)
+      else
+        puts "Please input the expense id."
+      end
+    else
+      self.display_help
+    end
+  end
+  
+  def display_help
+    puts <<-HELP
+      An expense recording system
+    
+      Commands:
+    
+      add AMOUNT MEMO [DATE] - record a new expense
+      clear - delete all expenses
+      list - list all expenses
+      delete NUMBER - remove expense with id NUMBER
+      search QUERY - list expenses with a matching memo field
+    HELP
+  end
+end
+
+class ExpenseData
+  def initialize()
+    @connection = PG.connect(dbname: "expense")
+  end
+  
+  def list_expenses
+    result = @connection.exec("SELECT * FROM expense ORDER BY created_on ASC")
+    display_results(result)
+  end
+  
+  def add_expense(amount, memo, date)
+    sql = "INSERT INTO expense (amount, memo) VALUES ($1, $2);"
+    @connection.exec_params(sql, [amount, memo])
+  end
+  
+  def search_expense(query)
+    sql = "SELECT * FROM expense WHERE (memo LIKE $1);"
+    result = @connection.exec(sql, ["%#{query}%"])
+    display_results(result)
+  end
+  
+  def delete_expense(id)
+    sql = "SELECT * FROM expense WHERE id = $1;"
+    result = @connection.exec_params(sql, [id])
+    if result.ntuples > 0
+      puts "The following expense has been deleted:"
+      sql = "DELETE FROM expense WHERE id = $1"
+      @connection.exec_params(sql, [id])
+      display_results(result);
+    else
+      puts "There is no expense with the id '#{id}'"
+    end
+  end
+  
+  private
+  
+  def display_results(result)
+
+    headers = result.fields
+    headers[0] = headers[0].rjust(3)
+    headers[1] = headers[1].rjust(15)
+    headers[2] = headers[2].rjust(12)
+    
+    puts headers.join(" | ")
+
+    result.each do |tuple|
+      column = [ tuple["id"].rjust(3),
+                 tuple["created_on"].rjust(15),
+                 tuple["amount"].rjust(12),
+                 tuple["memo"]]
+      puts column.join(" | ")
+    end
+  end
+end
+
+CLI.new.run(ARGV)
+
+
+
