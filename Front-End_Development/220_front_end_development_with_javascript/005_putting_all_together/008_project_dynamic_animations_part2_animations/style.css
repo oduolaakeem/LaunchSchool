@@ -1,0 +1,82 @@
+body {
+  margin: 0 auto;
+  background: #780E24;
+  padding: 10px 0;
+  font: 14px Helvetica, Arial, sans-serif;
+}
+
+.column {
+  width: 850px;
+  margin: 0 auto;
+  background: #FFFFFF;
+  padding: 25px 25px;
+  box-sizing: border-box;
+}
+
+#canvas {
+  position: relative;
+  overflow: hidden;
+  width: 800px;
+  height: 600px;
+  margin: 0 auto;
+  background: linear-gradient(180deg, #FFFFFF, #0066CC);
+  border: solid 1px gray;
+}
+
+.square, .circle, .star {
+  position: absolute;
+  width: 30px;
+  height: 30px;
+}
+
+.square {
+  background-color: #DDE338;
+}
+
+.circle {
+  background-color: #DDE338;
+  border-radius: 100%;
+}
+
+.star {
+  background: transparent url("./star.png");
+  background-size: 30px auto;
+}
+
+#controls h1 {
+  margin-top: 0;
+}
+
+fieldset {
+  border: none;
+  padding: 0;
+}
+
+form {
+  margin-top: 25px;
+}
+
+fieldset h2 {
+  margin-top: 0;
+}
+
+form ul {
+  list-style: none;
+  padding-left: 10px;
+}
+
+form .position {
+  display: block;
+  margin-top: 20px;
+}
+
+form input[type=number] {
+  width: 70px;
+  height: 30px;
+  margin-top: 5px;
+}
+
+form input[type=submit] {
+  display: block;
+  margin-top: 20px;
+}

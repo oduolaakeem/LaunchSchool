@@ -1,0 +1,63 @@
+body {
+  margin: 30px auto;
+  text-align: center;
+  font-family: helvetica;
+}
+
+main {
+  margin: 10px auto;
+  padding: 20px 20px;
+  width: 400px;
+  background: white;
+  border: 20px solid #00d3b6;
+}
+
+form h2, form label {
+  font-size: 36px;
+  text-align: left;
+  color: #00d3b6;
+}
+
+form label {
+  font-weight: bold;
+  padding-top: 20px;
+  font-size: 18px;
+}
+
+label, input {
+  display: block;
+}
+
+input[type=text] {
+  font-size: 16px;
+  width: 400px;
+  border: 1px solid #cecece;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+input[name=quantity] {
+  width: 50px;
+}
+
+input[type=submit] {
+  display: inline-block;
+  background: linear-gradient(175deg, red, #5A0E0A);
+  color: white;
+  border-radius: 5px;
+  border: none;
+  width: 400px;
+  margin: 20px 0;
+  padding: 15px 0;
+}
+
+div h2 {
+  font-size: 24px;
+  color: #e1002a;
+}
+
+div ul {
+  text-align: left;
+  color: #00d3b6;
+  font-size: 18px;
+}

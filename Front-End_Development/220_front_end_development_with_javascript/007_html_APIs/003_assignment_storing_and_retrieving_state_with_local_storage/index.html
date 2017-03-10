@@ -1,0 +1,50 @@
+<!doctype <!DOCTYPE html>
+<html>
+  <head>
+    <title>State with local storage</title>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="style.css" type="text/css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script type="text/javascript" src="script.js"></script>
+  </head>
+  <body>
+    <main>
+      <nav>
+        <ul>
+          <li><a class="active" href="#" data-id="1">Tab 1</a></li>
+          <li><a href="#" data-id="2">Tab 2</a></li>
+          <li><a href="#" data-id="3">Tab 3</a></li>
+        </ul>
+      </nav>
+      
+      <section id="tabs">
+        <article data-id="1">
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sed sagittis orci, in sodales sem. Vivamus nunc urna, vestibulum sed ullamcorper sit amet, accumsan eu nisi. Duis felis ex, fermentum id tincidunt sed, pellentesque ut sapien. Morbi bibendum cursus ipsum nec molestie. Curabitur tortor turpis, tincidunt quis erat eu, finibus pharetra massa. Proin a pellentesque ipsum. Nullam at orci a sapien sollicitudin rhoncus vitae a enim. Morbi sagittis dolor ut elit posuere, pretium feugiat nunc pharetra. Ut non mauris sagittis, sollicitudin erat et, varius augue. Fusce ac lectus id nibh porta ultricies. Mauris pharetra maximus libero, sit amet facilisis est cursus quis. Nulla nec elit bibendum, feugiat ipsum vitae, lacinia metus. Suspendisse cursus vel lorem vel hendrerit. Maecenas consectetur id magna ac auctor.</p>
+        </article>
+          
+        <article data-id="2">
+          <p>Vivamus pulvinar quis massa in lobortis. Nullam vitae rhoncus lacus, in maximus nisi. Nulla maximus in eros a hendrerit. Sed vitae nibh ex. Duis accumsan pharetra felis, in tincidunt metus convallis convallis. Vivamus id odio a turpis auctor tincidunt et vitae diam. Maecenas non pretium eros. Aliquam erat volutpat. Sed ac ligula hendrerit velit egestas dignissim ut ut diam. Aliquam vehicula nibh rhoncus bibendum semper. Sed sed blandit sem.</p>
+        </article>
+        
+        <article data-id="3">
+          <p>Nulla et augue euismod, feugiat lacus iaculis, consequat arcu. Etiam scelerisque elit risus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Morbi volutpat ullamcorper sem. Nam ac nisl semper, finibus orci et, pulvinar dolor. Donec quis leo neque. Nunc molestie ipsum vel ante efficitur cursus. Aliquam condimentum auctor nibh, eget mattis mauris dapibus vitae. Pellentesque id euismod purus. Nulla non nunc a diam semper vehicula sed et elit. Nullam commodo massa quis semper facilisis. Suspendisse potenti. Integer quis odio mauris.</p>
+        </article>
+      </section>
+      
+      <form action="" method="get">
+        <fieldset>
+          <h2>Change background color to:</h2>
+          <ul>
+            <li><label><input type="radio" name="background" value="#ff0000" />Red</label></li>
+            <li><label><input type="radio" name="background" value="#00ff00" />Green</label></li>
+            <li><label><input type="radio" name="background" value="#0000ff" />Blue</label></li>
+            <li><label><input type="radio" name="background" value="#ffff00" />Yellow</label></li>
+            <li><label><input type="radio" name="background" value="#ff00ff" />Pink</label></li>
+          </ul>
+          <h2>Leave a note</h2>
+          <textarea name="note" rows="8" cols="80"></textarea>
+        </fieldset>
+      </form>
+    </main>
+  </body>
+</html>

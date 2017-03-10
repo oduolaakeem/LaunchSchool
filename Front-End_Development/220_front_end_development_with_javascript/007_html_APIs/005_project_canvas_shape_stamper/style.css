@@ -1,0 +1,54 @@
+html {
+  background: gray;
+}
+
+body {
+  width: 800px;
+  margin: 0 auto;
+  font-family: Helvetica, Arial, sans-serif;
+}
+
+canvas {
+  margin: 20px auto 0 auto;
+  border: 5px solid black;
+  background: #FFF;
+  box-sizing: border-box;
+}
+
+div {
+  width: 100%;
+  display: block;
+  margin: 10px auto;
+  text-align: center;
+}
+
+a {
+  display: inline-block;
+  width: 15%;
+  height: 30px;
+  line-height: 30px;
+  text-decoration: none;
+  color: black;
+  margin: 0 20px;
+  border: 1px solid black;
+  border-radius: 15px;
+  background: #FFF;
+}
+
+a.active {
+  background: #607d8b;
+}
+
+form {
+  text-align: center;
+  margin: 10px auto;
+}
+
+input[type=text] {
+  width: 25px;
+  margin: 0 20px;
+  width: 200px;
+  padding: 5px 10px;
+  border: 1px solid black;
+  border-radius: 15px;
+}
